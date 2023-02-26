@@ -34,13 +34,14 @@ public class Controller_2D : MonoBehaviour
             is_jumping = true;
         }
     }
+
     void FixedUpdate()
     {
 
         Vector2 target_velocity = new Vector2(horizontal_value * moveSpeed_horizontal * Time.deltaTime, rb.velocity.y);
         rb.velocity = Vector2.SmoothDamp(rb.velocity, target_velocity, ref ref_velocity, 0.05f);
 
-        // Jump
+        // JUMP
         if (is_jumping && grounded)
         {
             is_jumping = false;
@@ -48,6 +49,7 @@ public class Controller_2D : MonoBehaviour
             grounded = false;
         }
     }
+
     private void OnTriggerStay2D(Collider2D collision)
     {
         grounded = true;
