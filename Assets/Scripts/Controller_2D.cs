@@ -6,6 +6,7 @@ public class Controller_2D : MonoBehaviour
 {
     Rigidbody2D rb;
     SpriteRenderer sr;
+    BoxCollider2D co;
 
     float horizontal_value;
     int direction;
@@ -22,7 +23,8 @@ public class Controller_2D : MonoBehaviour
     [SerializeField] bool is_touching_front;
     [SerializeField] Transform front_check;
     [SerializeField] bool wall_sliding;
-    
+    [SerializeField] bool is_attacking;
+
     [SerializeField] float wall_sliding_speed;
     [SerializeField] float x_wall_force;
     [SerializeField] float y_wall_force;
@@ -52,6 +54,12 @@ public class Controller_2D : MonoBehaviour
         {
             is_jumping = true;
             Jump();
+        }
+
+        if (Input.GetButtonDown("Fire1"))
+        {
+            is_attacking = true;
+            Attack();
         }
 
         is_touching_front = Physics2D.OverlapCircle(front_check.position, check_radius, what_is_ground); // IS THE PLAYER TOUCHING A WALL ?
@@ -86,5 +94,15 @@ public class Controller_2D : MonoBehaviour
         facing_right = !facing_right;
         direction = -direction;
         sr.flipX = !sr.flipX; // SPRITE
+    }
+
+    // ATTACK
+    void Attack()
+    {
+        if (is_attacking && !wall_sliding)
+        {
+            Debug.Log("test");
+        }
+        is_attacking = false;
     }
 }
