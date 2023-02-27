@@ -6,7 +6,6 @@ public class Controller_2D : MonoBehaviour
 {
     Rigidbody2D rb;
     SpriteRenderer sr;
-    BoxCollider2D co;
 
     float horizontal_value;
     int direction;
@@ -24,6 +23,8 @@ public class Controller_2D : MonoBehaviour
     [SerializeField] Transform front_check;
     [SerializeField] bool wall_sliding;
     [SerializeField] bool is_attacking;
+    [SerializeField] bool is_waiting;
+    [SerializeField] bool is_invisible;
 
     [SerializeField] float wall_sliding_speed;
     [SerializeField] float x_wall_force;
@@ -56,16 +57,22 @@ public class Controller_2D : MonoBehaviour
             Jump();
         }
 
-        if (Input.GetButtonDown("Fire1"))
+        if (Input.GetButtonDown("Attack"))
         {
             is_attacking = true;
             Attack();
         }
 
+        if (Input.GetButtonDown("Invisible") && !is_invisible && !is_waiting)
+        {
+            is_invisible = true;
+            StartCoroutine(Invisible());
+        }
+
         is_touching_front = Physics2D.OverlapCircle(front_check.position, check_radius, what_is_ground); // IS THE PLAYER TOUCHING A WALL ?
 
         // WALL SLIDING
-        if (is_touching_front && !grounded && horizontal_value != 0) 
+        if (is_touching_front && !grounded && horizontal_value != 0 && !is_invisible)
         {
             wall_sliding = true;
             rb.velocity = new Vector2(rb.velocity.x, Mathf.Clamp(rb.velocity.y, - wall_sliding_speed, float.MaxValue));
@@ -82,8 +89,8 @@ public class Controller_2D : MonoBehaviour
     // JUMP
     void Jump()
     {
-        if (is_jumping && grounded) rb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse); // NORMAL JUMP
-        else if (is_jumping && is_touching_front) rb.AddForce(new Vector2(x_wall_force * -direction, y_wall_force - rb.velocity.y), ForceMode2D.Impulse); // WALL JUMP
+        if (is_jumping && grounded && !is_invisible) rb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse); // NORMAL JUMP
+        else if (is_jumping && is_touching_front && !is_invisible) rb.AddForce(new Vector2(x_wall_force * -direction, y_wall_force - rb.velocity.y), ForceMode2D.Impulse); // WALL JUMP
         is_jumping = false;
     }
 
@@ -99,10 +106,28 @@ public class Controller_2D : MonoBehaviour
     // ATTACK
     void Attack()
     {
-        if (is_attacking && !wall_sliding)
+        if (is_attacking && !wall_sliding && !is_invisible)
         {
-            Debug.Log("test");
+            Debug.Log("attack");
         }
         is_attacking = false;
+    }
+
+    // INVISIBLE
+    IEnumerator Invisible()
+    {
+        if (is_invisible && !is_waiting)
+        {
+            moveSpeed_horizontal = 0f; // PLAYER CANNOT MOVE
+            rb.velocity = Vector2.zero;
+            rb.gravityScale = 0.05f; // FALLING SLOWLY
+            yield return new WaitForSeconds(3);
+        }
+        rb.gravityScale = 7f;
+        moveSpeed_horizontal = 800f;
+        is_invisible = false;
+        is_waiting = true; // COOLDOWN
+        yield return new WaitForSeconds(5);
+        is_waiting = false;
     }
 }

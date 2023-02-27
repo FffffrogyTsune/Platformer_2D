@@ -1203,6 +1203,7 @@ MonoBehaviour:
   front_check: {fileID: 1231525482}
   wall_sliding: 0
   is_attacking: 0
+  is_invisible: 0
   wall_sliding_speed: 2
   x_wall_force: 90
   y_wall_force: 25
