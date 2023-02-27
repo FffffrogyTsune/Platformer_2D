@@ -8,6 +8,7 @@ public class Controller_2D : MonoBehaviour
     SpriteRenderer sr;
 
     float horizontal_value;
+    int direction;
     [SerializeField] float moveSpeed_horizontal = 800.0f;
     Vector2 ref_velocity = Vector2.zero;
     bool facing_right = true;
@@ -33,6 +34,7 @@ public class Controller_2D : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
 
+        direction = 1;
         sr.flipX = false;
     }
 
@@ -54,13 +56,13 @@ public class Controller_2D : MonoBehaviour
 
         is_touching_front = Physics2D.OverlapCircle(front_check.position, check_radius, what_is_ground); // IS THE PLAYER TOUCHING A WALL ?
 
-        if (is_touching_front && !grounded && horizontal_value != 0) wall_sliding = true;
-        else wall_sliding = false;
-
-        if (wall_sliding)
+        // WALL SLIDING
+        if (is_touching_front && !grounded && horizontal_value != 0) 
         {
+            wall_sliding = true;
             rb.velocity = new Vector2(rb.velocity.x, Mathf.Clamp(rb.velocity.y, - wall_sliding_speed, float.MaxValue));
         }
+        else wall_sliding = false;
     }
 
     void FixedUpdate()
@@ -73,15 +75,16 @@ public class Controller_2D : MonoBehaviour
     void Jump()
     {
         if (is_jumping && grounded) rb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse); // NORMAL JUMP
-        else if (is_jumping && wall_sliding) rb.AddForce(new Vector2(x_wall_force * -horizontal_value, y_wall_force), ForceMode2D.Impulse); // WALL JUMP
+        else if (is_jumping && is_touching_front) rb.AddForce(new Vector2(x_wall_force * -direction, y_wall_force - rb.velocity.y), ForceMode2D.Impulse); // WALL JUMP
         is_jumping = false;
     }
 
     // FLIP (INVERT)
     void Flip()
     {
-        transform.localScale = new Vector2(transform.localScale.x, transform.localScale.y);
+        front_check.localPosition = -front_check.localPosition;
         facing_right = !facing_right;
+        direction = -direction;
         sr.flipX = !sr.flipX; // SPRITE
     }
 }
