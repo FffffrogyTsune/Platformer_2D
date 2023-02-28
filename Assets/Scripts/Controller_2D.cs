@@ -6,6 +6,7 @@ public class Controller_2D : MonoBehaviour
 {
     Rigidbody2D rb;
     SpriteRenderer sr;
+    CapsuleCollider2D col;
 
     float horizontal_value;
     int direction;
@@ -36,6 +37,7 @@ public class Controller_2D : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
+        col = GetComponent<CapsuleCollider2D>();
 
         direction = 1;
         sr.flipX = false;
@@ -51,13 +53,13 @@ public class Controller_2D : MonoBehaviour
 
         grounded = Physics2D.OverlapCircle(ground_check.position, check_radius, what_is_ground); // IS THE PLAYER GROUNDED ?
 
-        if (Input.GetButtonDown("Jump"))
+        if (Input.GetButtonDown("Jump") && !is_invisible)
         {
             is_jumping = true;
             Jump();
         }
 
-        if (Input.GetButtonDown("Attack"))
+        if (Input.GetButtonDown("Attack") && !wall_sliding && !is_invisible)
         {
             is_attacking = true;
             Attack();
@@ -89,8 +91,8 @@ public class Controller_2D : MonoBehaviour
     // JUMP
     void Jump()
     {
-        if (is_jumping && grounded && !is_invisible) rb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse); // NORMAL JUMP
-        else if (is_jumping && is_touching_front && !is_invisible) rb.AddForce(new Vector2(x_wall_force * -direction, y_wall_force - rb.velocity.y), ForceMode2D.Impulse); // WALL JUMP
+        if (is_jumping && grounded) rb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse); // NORMAL JUMP
+        else if (is_jumping && is_touching_front) rb.AddForce(new Vector2(x_wall_force * -direction, y_wall_force - rb.velocity.y), ForceMode2D.Impulse); // WALL JUMP
         is_jumping = false;
     }
 
@@ -106,7 +108,7 @@ public class Controller_2D : MonoBehaviour
     // ATTACK
     void Attack()
     {
-        if (is_attacking && !wall_sliding && !is_invisible)
+        if (is_attacking)
         {
             Debug.Log("attack");
         }
@@ -116,13 +118,12 @@ public class Controller_2D : MonoBehaviour
     // INVISIBLE
     IEnumerator Invisible()
     {
-        if (is_invisible && !is_waiting)
-        {
-            moveSpeed_horizontal = 0f; // PLAYER CANNOT MOVE
-            rb.velocity = Vector2.zero;
-            rb.gravityScale = 0.05f; // FALLING SLOWLY
-            yield return new WaitForSeconds(3);
-        }
+        moveSpeed_horizontal = 0f; // PLAYER CANNOT MOVE
+        rb.velocity = Vector2.zero;
+        rb.gravityScale = 0f; // PLAYER CANNOT CROSS THE GROUND
+        col.isTrigger = true;
+        yield return new WaitForSeconds(3);
+        col.isTrigger = false;
         rb.gravityScale = 7f;
         moveSpeed_horizontal = 800f;
         is_invisible = false;
