@@ -22,6 +22,7 @@ public class Switch_01 : MonoBehaviour
         {
             Debug.Log("test");
             Destroy(GameObject.Find("Gate_01"));
+            Destroy(GameObject.Find("Gate_02"));
         }
     }
 }

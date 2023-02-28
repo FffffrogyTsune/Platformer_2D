@@ -17,6 +17,7 @@ public class Controller_2D : MonoBehaviour
     bool is_jumping = false;
 
     float check_radius = 0.5f;
+    [SerializeField] string character;
     [SerializeField] bool grounded;
     [SerializeField] Transform ground_check;
     [SerializeField] LayerMask what_is_ground;
@@ -26,6 +27,7 @@ public class Controller_2D : MonoBehaviour
     [SerializeField] bool is_attacking;
     [SerializeField] bool is_waiting;
     [SerializeField] bool is_invisible;
+    [SerializeField] bool is_changing;
 
     [SerializeField] float wall_sliding_speed;
     [SerializeField] float x_wall_force;
@@ -41,6 +43,7 @@ public class Controller_2D : MonoBehaviour
 
         direction = 1;
         sr.flipX = false;
+        character = "Drako";
     }
 
     // Update is called once per frame
@@ -59,16 +62,22 @@ public class Controller_2D : MonoBehaviour
             Jump();
         }
 
-        if (Input.GetButtonDown("Attack") && !wall_sliding && !is_invisible)
+        if (Input.GetButtonDown("Attack") && !wall_sliding && !is_invisible && !is_changing)
         {
             is_attacking = true;
             Attack();
         }
 
-        if (Input.GetButtonDown("Invisible") && !is_invisible && !is_waiting)
+        if (Input.GetButtonDown("Invisible") && character == "Marth" && !is_invisible && !is_waiting && !is_changing)
         {
             is_invisible = true;
             StartCoroutine(Invisible());
+        }
+
+        if (Input.GetButtonDown("Change") && !is_attacking && !is_invisible && !is_waiting && !is_changing)
+        {
+            is_changing = true;
+            Change();
         }
 
         is_touching_front = Physics2D.OverlapCircle(front_check.position, check_radius, what_is_ground); // IS THE PLAYER TOUCHING A WALL ?
@@ -96,7 +105,7 @@ public class Controller_2D : MonoBehaviour
         is_jumping = false;
     }
 
-    // FLIP (INVERT)
+    // FLIP
     void Flip()
     {
         front_check.localPosition = -front_check.localPosition;
@@ -111,6 +120,7 @@ public class Controller_2D : MonoBehaviour
         if (is_attacking)
         {
             Debug.Log("attack");
+
         }
         is_attacking = false;
     }
@@ -130,5 +140,26 @@ public class Controller_2D : MonoBehaviour
         is_waiting = true; // COOLDOWN
         yield return new WaitForSeconds(5);
         is_waiting = false;
+    }
+
+    // CHANGE CHARACTER
+    void Change()
+    {
+        if (character == "Drako")
+        {
+            character = "Marth";
+            moveSpeed_horizontal = 600f;
+            jumpForce = 25f;
+            sr.color = Color.white; // SPRITE
+
+        }
+        else
+        {
+            character = "Drako";
+            moveSpeed_horizontal = 800f;
+            jumpForce = 30f;
+            sr.color = Color.black; // SPRITE
+        }
+        is_changing = false;
     }
 }
