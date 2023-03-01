@@ -7,17 +7,17 @@ public class Controller_2D : MonoBehaviour
     Rigidbody2D rb;
     SpriteRenderer sr;
 
+    [Header("Movement Settings")]
+    [SerializeField] float moveSpeed_horizontal = 1300.0f;
+    [SerializeField] float wall_sliding_speed = 2f;
     float horizontal_value;
     int direction;
-    [SerializeField] float moveSpeed_horizontal = 1300.0f;
     Vector2 ref_velocity = Vector2.zero;
     bool facing_right = true;
     float jumpForce = 55f;
     bool is_jumping = false;
 
-    float check_radius = 0.5f;
-    [SerializeField] bool hitable = true;
-    [SerializeField] [Range(0, 1000)] int gauge;
+    [Header("Status Settings")]
     [SerializeField] bool grounded;
     [SerializeField] Transform ground_check;
     [SerializeField] LayerMask what_is_ground;
@@ -28,8 +28,20 @@ public class Controller_2D : MonoBehaviour
     [SerializeField] bool is_dashing;
     [SerializeField] bool is_waiting;
     [SerializeField] bool is_invisible;
-    [SerializeField] float wall_sliding_speed;
-    [SerializeField] float x_wall_force;
+    float check_radius = 0.5f;
+
+    [Header("Attack Settings")]
+    [SerializeField] [Range(0, 1000)] public int gauge;
+    [SerializeField] int damage_point = 15;
+    [SerializeField] Transform attack_point;
+    [SerializeField] LayerMask enemy_layers;
+    float attack_range = 1f;
+    float next_attack_time = 0f;
+
+    [Header("Dash Settings")]
+    [SerializeField] float dashing_velocity = 100f;
+    [SerializeField] float dashing_time = 0.2f;
+    Vector2 dashing_direction;
 
     // Start is called before the first frame update
     void Start()
@@ -57,18 +69,20 @@ public class Controller_2D : MonoBehaviour
             Jump();
         }
 
-        if (Input.GetButtonDown("Attack") && !wall_sliding && !is_invisible)
+        if (Input.GetButtonDown("Attack") && Time.time >= next_attack_time && !wall_sliding && !is_dashing && !is_invisible)
         {
             is_attacking = true;
             Attack();
         }
 
-        if (Input.GetKeyDown(KeyCode.E) && gauge >= 200 && !wall_sliding && !is_dashing && !is_waiting)
+        if (Input.GetButtonDown("Dash") && gauge >= 200 && !wall_sliding && !is_dashing && !is_waiting)
         {
             is_dashing = true;
             gauge -= 200;
             StartCoroutine(Dash());
         }
+
+        if (is_dashing) rb.velocity = dashing_direction.normalized * dashing_velocity;
 
         if (Input.GetButtonDown("Invisible") && gauge >= 800 && !is_invisible && !is_waiting)
         {
@@ -98,7 +112,6 @@ public class Controller_2D : MonoBehaviour
     void Jump()
     {
         if (is_jumping && grounded) rb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse); // NORMAL JUMP
-        //else if (is_jumping && is_touching_front) rb.AddForce(new Vector2(x_wall_force * -direction, jumpForce - rb.velocity.y), ForceMode2D.Impulse); // WALL JUMP
         is_jumping = false;
     }
 
@@ -106,6 +119,7 @@ public class Controller_2D : MonoBehaviour
     void Flip()
     {
         front_check.localPosition = -front_check.localPosition;
+        attack_point.localPosition = -attack_point.localPosition;
         facing_right = !facing_right;
         direction = -direction;
         sr.flipX = !sr.flipX; // SPRITE
@@ -114,19 +128,21 @@ public class Controller_2D : MonoBehaviour
     // ATTACK
     void Attack()
     {
-        if (is_attacking)
+        Collider2D[] hit_enemies = Physics2D.OverlapCircleAll(attack_point.position, attack_range, enemy_layers); // LIST OF ALL ENEMIES HIT
+        foreach(Collider2D enemy in hit_enemies) // FOR EACH ENEMIES HIT
         {
-            Debug.Log("attack");
+            enemy.GetComponent<Enemy>().TakeDamage(damage_point); // TAKES THE TakeDamage(int damage) FUNCTION IN THE ENEMY'S SCRIPT TO GIVE DAMAGE TO THE ENEMY
         }
+        next_attack_time = Time.time + 0.25f; // LIMITS THE NUMBER OF ATTACKS AT 4 PER SECONDS
         is_attacking = false;
     }
 
     // DASH
     IEnumerator Dash()
     {
-        hitable = false;
-        rb.AddForce(new Vector2(150 * direction, 0), ForceMode2D.Impulse);
-        hitable = true;
+        dashing_direction = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")); // DIRECTION OF THE DASH
+        if (dashing_direction == Vector2.zero) dashing_direction = new Vector2(transform.localScale.x * direction, 0); // IF THE PLAYER IS NOT MOVING, HE WILL DASH WHERE HE'S TURNED
+        yield return new WaitForSeconds(dashing_time);
         is_dashing = false;
         is_waiting = true; // COOLDOWN
         yield return new WaitForSeconds(1);
@@ -136,10 +152,8 @@ public class Controller_2D : MonoBehaviour
     // INVISIBLE
     IEnumerator Invisible()
     {
-        hitable = false;
         yield return new WaitForSeconds(3);
         is_invisible = false;
-        hitable = true;
         is_waiting = true; // COOLDOWN
         yield return new WaitForSeconds(1);
         is_waiting = false;
