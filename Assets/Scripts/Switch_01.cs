@@ -20,9 +20,7 @@ public class Switch_01 : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            Debug.Log("test");
             Destroy(GameObject.Find("Gate_01"));
-            Destroy(GameObject.Find("Gate_02"));
         }
     }
 }

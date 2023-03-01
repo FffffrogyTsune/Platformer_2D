@@ -6,18 +6,18 @@ public class Controller_2D : MonoBehaviour
 {
     Rigidbody2D rb;
     SpriteRenderer sr;
-    CapsuleCollider2D col;
 
     float horizontal_value;
     int direction;
-    [SerializeField] float moveSpeed_horizontal = 800.0f;
+    [SerializeField] float moveSpeed_horizontal = 1300.0f;
     Vector2 ref_velocity = Vector2.zero;
     bool facing_right = true;
-    float jumpForce = 30f;
+    float jumpForce = 55f;
     bool is_jumping = false;
 
     float check_radius = 0.5f;
-    [SerializeField] string character;
+    [SerializeField] bool hitable = true;
+    [SerializeField] [Range(0, 1000)] int gauge;
     [SerializeField] bool grounded;
     [SerializeField] Transform ground_check;
     [SerializeField] LayerMask what_is_ground;
@@ -25,25 +25,20 @@ public class Controller_2D : MonoBehaviour
     [SerializeField] Transform front_check;
     [SerializeField] bool wall_sliding;
     [SerializeField] bool is_attacking;
+    [SerializeField] bool is_dashing;
     [SerializeField] bool is_waiting;
     [SerializeField] bool is_invisible;
-    [SerializeField] bool is_changing;
-
     [SerializeField] float wall_sliding_speed;
     [SerializeField] float x_wall_force;
-    [SerializeField] float y_wall_force;
-    [SerializeField] float wall_jump_time;
 
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
-        col = GetComponent<CapsuleCollider2D>();
 
         direction = 1;
         sr.flipX = false;
-        character = "Drako";
     }
 
     // Update is called once per frame
@@ -56,34 +51,36 @@ public class Controller_2D : MonoBehaviour
 
         grounded = Physics2D.OverlapCircle(ground_check.position, check_radius, what_is_ground); // IS THE PLAYER GROUNDED ?
 
-        if (Input.GetButtonDown("Jump") && !is_invisible)
+        if (Input.GetButtonDown("Jump"))
         {
             is_jumping = true;
             Jump();
         }
 
-        if (Input.GetButtonDown("Attack") && !wall_sliding && !is_invisible && !is_changing)
+        if (Input.GetButtonDown("Attack") && !wall_sliding && !is_invisible)
         {
             is_attacking = true;
             Attack();
         }
 
-        if (Input.GetButtonDown("Invisible") && character == "Marth" && !is_invisible && !is_waiting && !is_changing)
+        if (Input.GetKeyDown(KeyCode.E) && gauge >= 200 && !wall_sliding && !is_dashing && !is_waiting)
         {
-            is_invisible = true;
-            StartCoroutine(Invisible());
+            is_dashing = true;
+            gauge -= 200;
+            StartCoroutine(Dash());
         }
 
-        if (Input.GetButtonDown("Change") && !is_attacking && !is_invisible && !is_waiting && !is_changing)
+        if (Input.GetButtonDown("Invisible") && gauge >= 800 && !is_invisible && !is_waiting)
         {
-            is_changing = true;
-            Change();
+            is_invisible = true;
+            gauge -= 800;
+            StartCoroutine(Invisible());
         }
 
         is_touching_front = Physics2D.OverlapCircle(front_check.position, check_radius, what_is_ground); // IS THE PLAYER TOUCHING A WALL ?
 
         // WALL SLIDING
-        if (is_touching_front && !grounded && horizontal_value != 0 && !is_invisible)
+        if (is_touching_front && !grounded && horizontal_value != 0)
         {
             wall_sliding = true;
             rb.velocity = new Vector2(rb.velocity.x, Mathf.Clamp(rb.velocity.y, - wall_sliding_speed, float.MaxValue));
@@ -101,7 +98,7 @@ public class Controller_2D : MonoBehaviour
     void Jump()
     {
         if (is_jumping && grounded) rb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse); // NORMAL JUMP
-        else if (is_jumping && is_touching_front) rb.AddForce(new Vector2(x_wall_force * -direction, y_wall_force - rb.velocity.y), ForceMode2D.Impulse); // WALL JUMP
+        //else if (is_jumping && is_touching_front) rb.AddForce(new Vector2(x_wall_force * -direction, jumpForce - rb.velocity.y), ForceMode2D.Impulse); // WALL JUMP
         is_jumping = false;
     }
 
@@ -120,46 +117,31 @@ public class Controller_2D : MonoBehaviour
         if (is_attacking)
         {
             Debug.Log("attack");
-
         }
         is_attacking = false;
+    }
+
+    // DASH
+    IEnumerator Dash()
+    {
+        hitable = false;
+        rb.AddForce(new Vector2(150 * direction, 0), ForceMode2D.Impulse);
+        hitable = true;
+        is_dashing = false;
+        is_waiting = true; // COOLDOWN
+        yield return new WaitForSeconds(1);
+        is_waiting = false;
     }
 
     // INVISIBLE
     IEnumerator Invisible()
     {
-        moveSpeed_horizontal = 0f; // PLAYER CANNOT MOVE
-        rb.velocity = Vector2.zero;
-        rb.gravityScale = 0f; // PLAYER CANNOT CROSS THE GROUND
-        col.isTrigger = true;
+        hitable = false;
         yield return new WaitForSeconds(3);
-        col.isTrigger = false;
-        rb.gravityScale = 7f;
-        moveSpeed_horizontal = 800f;
         is_invisible = false;
+        hitable = true;
         is_waiting = true; // COOLDOWN
-        yield return new WaitForSeconds(5);
+        yield return new WaitForSeconds(1);
         is_waiting = false;
-    }
-
-    // CHANGE CHARACTER
-    void Change()
-    {
-        if (character == "Drako")
-        {
-            character = "Marth";
-            moveSpeed_horizontal = 600f;
-            jumpForce = 25f;
-            sr.color = Color.white; // SPRITE
-
-        }
-        else
-        {
-            character = "Drako";
-            moveSpeed_horizontal = 800f;
-            jumpForce = 30f;
-            sr.color = Color.black; // SPRITE
-        }
-        is_changing = false;
     }
 }
