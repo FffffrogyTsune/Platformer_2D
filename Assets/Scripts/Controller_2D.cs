@@ -23,6 +23,7 @@ public class Controller_2D : MonoBehaviour
     [SerializeField] LayerMask what_is_ground;
     [SerializeField] bool is_touching_front;
     [SerializeField] Transform front_check;
+    [SerializeField] bool is_crouching;
     [SerializeField] bool wall_sliding;
     [SerializeField] bool is_attacking;
     [SerializeField] bool is_dashing;
@@ -91,6 +92,12 @@ public class Controller_2D : MonoBehaviour
             StartCoroutine(Invisible());
         }
 
+        // CROUCH AND SLIDE
+        if (Input.GetButtonDown("Crouch") && grounded);
+        {
+            // change collider, velocity,
+        }
+
         is_touching_front = Physics2D.OverlapCircle(front_check.position, check_radius, what_is_ground); // IS THE PLAYER TOUCHING A WALL ?
 
         // WALL SLIDING
@@ -105,7 +112,7 @@ public class Controller_2D : MonoBehaviour
     void FixedUpdate()
     {
         Vector2 target_velocity = new Vector2(horizontal_value * moveSpeed_horizontal * Time.deltaTime, rb.velocity.y);
-        rb.velocity = Vector2.SmoothDamp(rb.velocity, target_velocity, ref ref_velocity, 0.05f);
+        rb.velocity = Vector2.SmoothDamp(rb.velocity, target_velocity, ref ref_velocity, 0.05f); // BASIC MOVEMENT
     }
 
     // JUMP
@@ -140,7 +147,7 @@ public class Controller_2D : MonoBehaviour
     // DASH
     IEnumerator Dash()
     {
-        dashing_direction = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")); // DIRECTION OF THE DASH
+        dashing_direction = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical") / 1.5f); // DIRECTION OF THE DASH
         if (dashing_direction == Vector2.zero) dashing_direction = new Vector2(transform.localScale.x * direction, 0); // IF THE PLAYER IS NOT MOVING, HE WILL DASH WHERE HE'S TURNED
         yield return new WaitForSeconds(dashing_time);
         is_dashing = false;
