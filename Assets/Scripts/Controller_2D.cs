@@ -15,7 +15,7 @@ public class Controller_2D : MonoBehaviour
     int direction;
     Vector2 ref_velocity = Vector2.zero;
     bool facing_right = true;
-    float jumpForce = 22f;
+    float jumpForce = 30f;
     bool is_jumping = false;
 
     [Header("Status Settings")]
@@ -67,8 +67,8 @@ public class Controller_2D : MonoBehaviour
         if (horizontal_value > 0 && !facing_right) Flip(); // PLAYER MOVING TO THE RIGHT
         else if (horizontal_value < 0 && facing_right) Flip(); // PLAYER MOVING TO THE LEFT
 
-        if (rb.velocity.y < 0) rb.gravityScale = 6;
-        else rb.gravityScale = 4;
+        if (rb.velocity.y < 0) rb.gravityScale = 12;
+        else rb.gravityScale = 10;
 
         grounded = Physics2D.OverlapCircle(ground_check.position, check_radius, what_is_ground); // IS THE PLAYER GROUNDED ?
         is_touching_front = Physics2D.OverlapCircle(front_check.position, check_radius, what_is_ground); // IS THE PLAYER TOUCHING A WALL ?
