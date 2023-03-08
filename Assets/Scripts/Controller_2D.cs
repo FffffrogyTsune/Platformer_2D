@@ -29,12 +29,13 @@ public class Controller_2D : MonoBehaviour
     [SerializeField] bool is_crouching;
     [SerializeField] bool wall_sliding;
     [SerializeField] bool is_attacking;
+    [SerializeField] bool is_guarding;
     [SerializeField] bool is_dashing;
     [SerializeField] bool is_waiting;
     float check_radius = 0.5f;
+    public Player_Gauge player_gauge;
 
     [Header("Attack Settings")]
-    [SerializeField] public int gauge;
     [SerializeField] int damage_point = 15;
     [SerializeField] Transform attack_point;
     [SerializeField] Transform special_attack_point;
@@ -91,22 +92,24 @@ public class Controller_2D : MonoBehaviour
             Attack();
         }
 
-        if(Input.GetButton("Shield"))
+        if (Input.GetButton("Shield"))
         {
-            Debug.Log("Shield");
+            is_guarding = true;
+            Guard();
         }
+        else is_guarding = false;
 
-        if (Input.GetButtonDown("Special") && gauge >= 800 && !wall_sliding && !is_dashing && !is_waiting)
+        if (Input.GetButtonDown("Special") && player_gauge.current_gauge >= 400 && !wall_sliding && !is_dashing && !is_waiting)
         {
             is_attacking = true;
-            gauge -= 800;
+            player_gauge.Reduce(400);
             StartCoroutine(Special());
         }
 
-        if (Input.GetButtonDown("Dash") && gauge >= 200 && !wall_sliding && !is_dashing && !is_waiting)
+        if (Input.GetButtonDown("Dash") && player_gauge.current_gauge >= 200 && !wall_sliding && !is_dashing && !is_waiting)
         {
             is_dashing = true;
-            gauge -= 200;
+            player_gauge.Reduce(200);
             StartCoroutine(Dash());
         }
 
@@ -171,8 +174,14 @@ public class Controller_2D : MonoBehaviour
         is_attacking = false;
     }
 
-    // SPECIAL ATTACK  
-    IEnumerator Special()
+    // GUARD
+    void Guard()
+    {
+        Debug.Log("Shield");
+    }
+
+    // SPECIAL ATTACK
+    IEnumerator Special() // A CHANGER VOIR GDOC
     {
         yield return new WaitForSeconds(0.5f);
         Collider2D[] hit_enemies = Physics2D.OverlapCircleAll(special_attack_point.position, attack_range * 10, enemy_layers); // LIST OF ALL ENEMIES HIT

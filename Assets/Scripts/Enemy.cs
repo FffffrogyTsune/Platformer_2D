@@ -28,7 +28,6 @@ public class Enemy : MonoBehaviour
     {
         this.enabled = false; // DEACTIVATE THIS SCRIPT
         GetComponent<BoxCollider2D>().enabled = false; // DEACTIVATE THE BOX COLLIDER 2D
-        GameObject.Find("Player").GetComponent<Controller_2D>().gauge += 5;
         Debug.Log("Je suis mort !");
     }
 }
