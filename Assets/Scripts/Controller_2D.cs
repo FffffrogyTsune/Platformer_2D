@@ -91,6 +91,11 @@ public class Controller_2D : MonoBehaviour
             Attack();
         }
 
+        if(Input.GetButton("Shield"))
+        {
+            Debug.Log("Shield");
+        }
+
         if (Input.GetButtonDown("Special") && gauge >= 800 && !wall_sliding && !is_dashing && !is_waiting)
         {
             is_attacking = true;
