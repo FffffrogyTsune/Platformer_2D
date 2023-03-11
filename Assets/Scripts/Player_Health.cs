@@ -6,10 +6,9 @@ public class Player_Health : MonoBehaviour
 {
     public int max_health = 100;
     public int current_health;
-
     public Health_Bar health_bar;
 
-    int damage = 10;
+    int damage = 10; // TEST
 
     // Start is called before the first frame update
     void Start()
