@@ -86,7 +86,7 @@ public class Controller_2D : MonoBehaviour
         }
         else is_crouching = false;
 
-        if (Input.GetButtonDown("Attack") && Time.time >= next_attack_time && !wall_sliding && !is_dashing && !is_waiting)
+        if (Input.GetButtonDown("Attack") && Time.time >= next_attack_time && !wall_sliding && !is_guarding && !is_dashing && !is_waiting)
         {
             is_attacking = true;
             Attack();
@@ -95,7 +95,6 @@ public class Controller_2D : MonoBehaviour
         if (Input.GetButton("Shield"))
         {
             is_guarding = true;
-            Guard();
         }
         else is_guarding = false;
 
@@ -130,7 +129,7 @@ public class Controller_2D : MonoBehaviour
         // CROUCH
         if (is_crouching && grounded)
         {
-            moveSpeed_horizontal = 350f;
+            moveSpeed_horizontal = 300f;
             transform.localScale = new Vector2(1.5f, 0.7f);
             cap.direction = CapsuleDirection2D.Horizontal;
         }
@@ -140,6 +139,13 @@ public class Controller_2D : MonoBehaviour
             moveSpeed_horizontal = 800f;
             transform.localScale = new Vector2(1.5f, 1.2f);
             cap.direction = CapsuleDirection2D.Vertical;
+        }
+
+        // GUARD
+        if (is_guarding && !wall_sliding)
+        {
+            Debug.Log("Guard");
+            moveSpeed_horizontal = 300f;
         }
 
         if (is_dashing) rb.velocity = dashing_direction.normalized * dashing_velocity; // DASH
@@ -172,12 +178,6 @@ public class Controller_2D : MonoBehaviour
         }
         next_attack_time = Time.time + 0.25f; // LIMITS THE NUMBER OF ATTACKS AT 4 PER SECONDS
         is_attacking = false;
-    }
-
-    // GUARD
-    void Guard()
-    {
-        Debug.Log("Shield");
     }
 
     // SPECIAL ATTACK
