@@ -27,10 +27,25 @@ public class Player_Health : MonoBehaviour
         }
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Health_orb"))
+        {
+            GetHealth(10);
+            Destroy(collision.gameObject);
+        }
+    }
+
     //  TAKE DAMAGE
     public void TakeDamage(int damage)
     {
         current_health -= damage;
+        health_bar.SetHealth(current_health);
+    }
+
+    public void GetHealth(int health)
+    {
+        current_health += health;
         health_bar.SetHealth(current_health);
     }
 }

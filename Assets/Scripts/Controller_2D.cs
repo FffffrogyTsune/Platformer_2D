@@ -7,6 +7,7 @@ public class Controller_2D : MonoBehaviour
     Rigidbody2D rb;
     SpriteRenderer sr;
     CapsuleCollider2D cap;
+    public Player_Health player_health;
 
     [Header("Movement Settings")]
     [SerializeField] float moveSpeed_horizontal = 800.0f;
