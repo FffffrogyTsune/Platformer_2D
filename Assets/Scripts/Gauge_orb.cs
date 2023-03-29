@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Health_Orb : MonoBehaviour
+public class Gauge_orb : MonoBehaviour
 {
     Rigidbody2D rb;
     [SerializeField] bool grounded;

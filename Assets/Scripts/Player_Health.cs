@@ -25,13 +25,17 @@ public class Player_Health : MonoBehaviour
             TakeDamage(damage);
             Debug.Log("-10 point !");
         }
+        if (current_health > max_health) // CHECKS AT EVERY UPDATES THE HEALTH OF THE PLAYER, IF IT'S OVER THE MAX HEALTH, IT FIXES THE HEALTH TO MAX HEATH
+        {
+            current_health = max_health;
+        }
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerStay2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Health_orb"))
+        if (collision.gameObject.CompareTag("Health_orb") && current_health < max_health)
         {
-            GetHealth(10);
+            GetHealth(5);
             Destroy(collision.gameObject);
         }
     }
