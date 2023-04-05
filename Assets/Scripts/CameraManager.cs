@@ -6,7 +6,7 @@ public class CameraManager : MonoBehaviour
 {
     [SerializeField] GameObject playerRef;
     Vector3 refVelocity = Vector3.zero;
-    float smoothTime = 0.15f;
+    float smoothTime = 0.1f;
 
     // Start is called before the first frame update
     void Start()
@@ -16,7 +16,7 @@ public class CameraManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Vector3 targetPosition = new Vector3(playerRef.transform.position.x, playerRef.transform.position.y, -3);
+        Vector3 targetPosition = new Vector3(playerRef.transform.position.x, playerRef.transform.position.y + 0.8f, -1);
         gameObject.transform.position = Vector3.SmoothDamp(gameObject.transform.position, targetPosition, ref refVelocity, smoothTime);
     }
 }

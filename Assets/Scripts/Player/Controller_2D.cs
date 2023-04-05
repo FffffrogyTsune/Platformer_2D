@@ -7,16 +7,17 @@ public class Controller_2D : MonoBehaviour
     Rigidbody2D rb;
     SpriteRenderer sr;
     CapsuleCollider2D cap;
+    Animator anim_controller;
     public Player_Health player_health;
 
     [Header("Movement Settings")]
-    [SerializeField] float moveSpeed_horizontal = 800.0f;
+    [SerializeField] float moveSpeed_horizontal = 200.0f;
     [SerializeField] float wall_sliding_speed = 2f;
     float horizontal_value;
     int direction;
     Vector2 ref_velocity = Vector2.zero;
     bool facing_right = true;
-    float jumpForce = 30.5f;
+    float jumpForce = 8;
     bool is_jumping = false;
 
     [Header("Status Settings")]
@@ -33,7 +34,7 @@ public class Controller_2D : MonoBehaviour
     [SerializeField] bool is_guarding;
     [SerializeField] bool is_dashing;
     [SerializeField] bool is_waiting;
-    float check_radius = 0.5f;
+    float check_radius = 0.1f;
     public Player_Gauge player_gauge;
 
     [Header("Attack Settings")]
@@ -45,7 +46,7 @@ public class Controller_2D : MonoBehaviour
     float next_attack_time = 0f;
 
     [Header("Dash Settings")]
-    [SerializeField] float dashing_velocity = 40f;
+    [SerializeField] float dashing_velocity = 20f;
     [SerializeField] float dashing_time = 0.2f;
     Vector2 dashing_direction;
 
@@ -55,6 +56,7 @@ public class Controller_2D : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
         cap = GetComponent<CapsuleCollider2D>();
+        anim_controller = GetComponent<Animator>();
 
         direction = 1;
         sr.flipX = false;
@@ -68,8 +70,11 @@ public class Controller_2D : MonoBehaviour
         if (horizontal_value > 0 && !facing_right) Flip(); // PLAYER MOVING TO THE RIGHT
         else if (horizontal_value < 0 && facing_right) Flip(); // PLAYER MOVING TO THE LEFT
 
-        if (rb.velocity.y < 0) rb.gravityScale = 12;
-        else rb.gravityScale = 10;
+        anim_controller.SetFloat("Speed", Mathf.Abs(horizontal_value));
+        anim_controller.SetFloat("Vel_Y", rb.velocity.y);
+
+        if (rb.velocity.y < 0) rb.gravityScale = 4;
+        else rb.gravityScale = 3;
 
         grounded = Physics2D.OverlapCircle(ground_check.position, check_radius, what_is_ground); // IS THE PLAYER GROUNDED ?
         is_touching_front = Physics2D.OverlapCircle(front_check.position, check_radius, what_is_ground); // IS THE PLAYER TOUCHING A WALL ?
@@ -130,24 +135,25 @@ public class Controller_2D : MonoBehaviour
         // CROUCH
         if (is_crouching && grounded)
         {
-            moveSpeed_horizontal = 300f;
+            moveSpeed_horizontal = 50f;
             transform.localScale = new Vector2(1.5f, 0.7f);
             cap.direction = CapsuleDirection2D.Horizontal;
         }
         else if (!is_touching_up)
         {
             is_crouching = false;
-            moveSpeed_horizontal = 800f;
-            transform.localScale = new Vector2(1.5f, 1.2f);
+            moveSpeed_horizontal = 200f;
+            transform.localScale = new Vector2(1, 1);
             cap.direction = CapsuleDirection2D.Vertical;
         }
 
         // GUARD
         if (is_guarding && !wall_sliding)
         {
-            Debug.Log("Guard");
+            anim_controller.SetBool("Guard", true);
             moveSpeed_horizontal = 300f;
         }
+        else anim_controller.SetBool("Guard", false);
 
         if (is_dashing) rb.velocity = dashing_direction.normalized * dashing_velocity; // DASH
     }
