@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Health_orb
   - Gauge_orb
+  - Enemy
   layers:
   - Default
   - TransparentFX

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    int health_max = 50;
+    [SerializeField] int health_max;
     [SerializeField] int health;
 
     public Rigidbody2D health_orb;

@@ -152,6 +152,14 @@ public class Controller_2D : MonoBehaviour
         if (is_dashing) rb.velocity = dashing_direction.normalized * dashing_velocity; // DASH
     }
 
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Enemy") && !is_dashing)
+        {
+            player_health.TakeDamage(20);
+        }
+    }
+
     // JUMP
     void Jump()
     {
