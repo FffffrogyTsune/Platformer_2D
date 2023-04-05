@@ -16,7 +16,7 @@ public class Controller_2D : MonoBehaviour
     int direction;
     Vector2 ref_velocity = Vector2.zero;
     bool facing_right = true;
-    float jumpForce = 30f;
+    float jumpForce = 30.5f;
     bool is_jumping = false;
 
     [Header("Status Settings")]
@@ -154,7 +154,7 @@ public class Controller_2D : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Enemy") && !is_dashing)
+        if (collision.gameObject.CompareTag("Enemy") && !is_dashing && player_health.current_health > 0)
         {
             player_health.TakeDamage(20);
         }
