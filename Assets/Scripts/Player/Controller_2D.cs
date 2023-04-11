@@ -11,13 +11,13 @@ public class Controller_2D : MonoBehaviour
     public Player_Health player_health;
 
     [Header("Movement Settings")]
-    [SerializeField] float moveSpeed_horizontal = 200.0f;
-    [SerializeField] float wall_sliding_speed = 2f;
+    [SerializeField] float moveSpeed_horizontal;
+    [SerializeField] float wall_sliding_speed;
     float horizontal_value;
     int direction;
     Vector2 ref_velocity = Vector2.zero;
     bool facing_right = true;
-    float jumpForce = 8;
+    float jumpForce = 22.5f;
     bool is_jumping = false;
 
     [Header("Status Settings")]
@@ -46,7 +46,7 @@ public class Controller_2D : MonoBehaviour
     float next_attack_time = 0f;
 
     [Header("Dash Settings")]
-    [SerializeField] float dashing_velocity = 20f;
+    [SerializeField] float dashing_velocity = 90f;
     [SerializeField] float dashing_time = 0.2f;
     Vector2 dashing_direction;
 
@@ -73,8 +73,8 @@ public class Controller_2D : MonoBehaviour
         anim_controller.SetFloat("Speed", Mathf.Abs(horizontal_value));
         anim_controller.SetFloat("Vel_Y", rb.velocity.y);
 
-        if (rb.velocity.y < 0) rb.gravityScale = 4;
-        else rb.gravityScale = 3;
+        if (rb.velocity.y < 0) rb.gravityScale = 7;
+        else rb.gravityScale = 6;
 
         grounded = Physics2D.OverlapCircle(ground_check.position, check_radius, what_is_ground); // IS THE PLAYER GROUNDED ?
         is_touching_front = Physics2D.OverlapCircle(front_check.position, check_radius, what_is_ground); // IS THE PLAYER TOUCHING A WALL ?
@@ -135,15 +135,13 @@ public class Controller_2D : MonoBehaviour
         // CROUCH
         if (is_crouching && grounded)
         {
-            moveSpeed_horizontal = 50f;
-            transform.localScale = new Vector2(1.5f, 0.7f);
+            moveSpeed_horizontal = 200;
             cap.direction = CapsuleDirection2D.Horizontal;
         }
         else if (!is_touching_up)
         {
             is_crouching = false;
-            moveSpeed_horizontal = 200f;
-            transform.localScale = new Vector2(1, 1);
+            moveSpeed_horizontal = 450;
             cap.direction = CapsuleDirection2D.Vertical;
         }
 
@@ -151,7 +149,7 @@ public class Controller_2D : MonoBehaviour
         if (is_guarding && !wall_sliding)
         {
             anim_controller.SetBool("Guard", true);
-            moveSpeed_horizontal = 300f;
+            moveSpeed_horizontal = 250;
         }
         else anim_controller.SetBool("Guard", false);
 
