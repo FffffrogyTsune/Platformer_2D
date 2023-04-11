@@ -14,7 +14,7 @@ public class Controller_2D : MonoBehaviour
     public Gauge_Bar gauge_bar;
 
     [Header("Movement Settings")]
-    [SerializeField] float moveSpeed_horizontal;
+    [SerializeField] float moveSpeed_horizontal = 650;
     [SerializeField] float wall_sliding_speed;
     float horizontal_value;
     int direction;
@@ -144,7 +144,11 @@ public class Controller_2D : MonoBehaviour
             anim_controller.SetBool("Guard", true);
             moveSpeed_horizontal = 250;
         }
-        else anim_controller.SetBool("Guard", false);
+        else
+        {
+            anim_controller.SetBool("Guard", false);
+            moveSpeed_horizontal = 650;
+        }
 
         if (is_dashing) rb.velocity = dashing_direction.normalized * dashing_velocity; // DASH
     }
@@ -220,6 +224,8 @@ public class Controller_2D : MonoBehaviour
         yield return new WaitForSeconds(1);
         is_waiting = false;
     }
+
+    // DEATH
     IEnumerator PlayerDie()
     {
         anim_controller.SetBool("Death", true);
@@ -230,6 +236,6 @@ public class Controller_2D : MonoBehaviour
         player_gauge.current_gauge = 300;
         gauge_bar.SetGauge(player_gauge.current_gauge);
         transform.position = respawn_point;
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(0.1f);
     }
 }
