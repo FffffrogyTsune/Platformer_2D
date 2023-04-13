@@ -37,6 +37,7 @@ public class Controller_2D : MonoBehaviour
     [SerializeField] bool is_guarding;
     [SerializeField] bool is_dashing;
     [SerializeField] bool is_waiting;
+    [SerializeField] bool is_invincible;
     float check_radius = 0.1f;
 
     [Header("Attack Settings")]
@@ -44,7 +45,7 @@ public class Controller_2D : MonoBehaviour
     [SerializeField] Transform attack_point;
     [SerializeField] Transform special_attack_point;
     [SerializeField] LayerMask enemy_layers;
-    float attack_range = 1f;
+    float attack_range = 1.2f;
     float next_attack_time = 0f;
 
     [Header("Dash Settings")]
@@ -155,9 +156,10 @@ public class Controller_2D : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Enemy") && !is_dashing && player_health.current_health > 0)
+        if (collision.gameObject.CompareTag("Enemy") && !is_dashing && player_health.current_health > 0 && !is_invincible)
         {
             player_health.TakeDamage(20);
+            StartCoroutine(Invincible());
         }
     }
 
@@ -219,10 +221,23 @@ public class Controller_2D : MonoBehaviour
         dashing_direction = new Vector2(Input.GetAxisRaw("Horizontal"), 0); // DIRECTION OF THE DASH
         if (dashing_direction == Vector2.zero) dashing_direction = new Vector2(transform.localScale.x * direction, 0); // IF THE PLAYER IS NOT MOVING, HE WILL DASH WHERE HE'S TURNED
         yield return new WaitForSeconds(dashing_time);
+        Collider2D[] hit_enemies = Physics2D.OverlapCircleAll(attack_point.position, attack_range, enemy_layers); // LIST OF ALL ENEMIES HIT
+        foreach (Collider2D enemy in hit_enemies) // FOR EACH ENEMIES HIT
+        {
+            enemy.GetComponent<Enemy>().TakeDamage(50); // TAKES THE TakeDamage(int damage) FUNCTION IN THE ENEMY'S SCRIPT TO GIVE DAMAGE TO THE ENEMY
+        }
         is_dashing = false;
         is_waiting = true; // COOLDOWN
         yield return new WaitForSeconds(1);
         is_waiting = false;
+    }
+
+    // INVINCIBILITY
+    IEnumerator Invincible()
+    {
+        is_invincible = true;
+        yield return new WaitForSeconds(0.8f);
+        is_invincible = false;
     }
 
     // DEATH
