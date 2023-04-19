@@ -20,7 +20,7 @@ public class Controller_2D : MonoBehaviour
     int direction;
     Vector2 ref_velocity = Vector2.zero;
     bool facing_right = true;
-    float jumpForce = 23.5f;
+    float jumpForce = 24.25f;
     bool is_jumping = false;
 
     [Header("Status Settings")]
@@ -236,7 +236,7 @@ public class Controller_2D : MonoBehaviour
     IEnumerator Invincible()
     {
         is_invincible = true;
-        yield return new WaitForSeconds(0.8f);
+        yield return new WaitForSeconds(1.5f);
         is_invincible = false;
     }
 
