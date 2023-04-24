@@ -24,7 +24,7 @@ public class Controller_2D : MonoBehaviour
     bool is_jumping = false;
 
     [Header("Status Settings")]
-    Vector2 respawn_point = new Vector2 (-7, 2.5f);
+    Vector2 respawn_point = new Vector2 (-73.5f, 2.5f);
     [SerializeField] bool grounded;
     [SerializeField] Transform ground_check;
     [SerializeField] LayerMask what_is_ground;
