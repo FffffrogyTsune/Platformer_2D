@@ -41,7 +41,7 @@ public class Enemy : MonoBehaviour
             G_orb.velocity = new Vector2(Random.Range(-10, 10), 28);
         }
 
-        GetComponent<BoxCollider2D>().enabled = false; // DEACTIVATE THE BOX COLLIDER 2D
+        GetComponent<CapsuleCollider2D>().enabled = false; // DEACTIVATE THE BOX COLLIDER 2D
         this.enabled = false; // DEACTIVATE THIS SCRIPT
         Destroy(gameObject);
     }

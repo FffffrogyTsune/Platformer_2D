@@ -7,6 +7,8 @@ public class Knight : MonoBehaviour
     Rigidbody2D rb;
 
     [SerializeField] float speed;
+    public Transform target;
+    public float height;
     Transform mob_transform;
     float horizontal_value = 1f;
     Vector2 ref_velocity = Vector2.zero;
@@ -21,17 +23,20 @@ public class Knight : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (Vector2.Distance(transform.position, target.position) < 15)
+        {
+            transform.position = Vector2.MoveTowards(transform.position, new Vector2(target.position.x, height), speed * Time.deltaTime); // FOLLOWING THE PLAYER
+        }
     }
 
     private void FixedUpdate()
     {
-        Vector2 target_velocity = new Vector2(horizontal_value * speed * Time.deltaTime, rb.velocity.y);
-        rb.velocity = Vector2.SmoothDamp(rb.velocity, target_velocity, ref ref_velocity, 0.05f); // BASIC MOVEMENT
+        //Vector2 target_velocity = new Vector2(horizontal_value * speed * Time.deltaTime, rb.velocity.y);
+        //rb.velocity = Vector2.SmoothDamp(rb.velocity, target_velocity, ref ref_velocity, 0.05f); // BASIC MOVEMENT
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        horizontal_value = -horizontal_value;
+        //horizontal_value = -horizontal_value;
     }
 }

@@ -14,7 +14,7 @@ public class Controller_2D : MonoBehaviour
     public Gauge_Bar gauge_bar;
 
     [Header("Movement Settings")]
-    [SerializeField] float moveSpeed_horizontal = 450;
+    [SerializeField] float moveSpeed_horizontal = 500;
     [SerializeField] float wall_sliding_speed;
     float horizontal_value;
     int direction;
@@ -71,7 +71,7 @@ public class Controller_2D : MonoBehaviour
         horizontal_value = Input.GetAxis("Horizontal");
 
         if (horizontal_value > 0 && !facing_right) Flip(); // PLAYER MOVING TO THE RIGHT
-        else if (horizontal_value < 0 && facing_right) Flip(); // PLAYER MOVING TO THE LEFT
+        else if (horizontal_value < -0 && facing_right) Flip(); // PLAYER MOVING TO THE LEFT
 
         anim_controller.SetFloat("Speed", Mathf.Abs(horizontal_value));
         anim_controller.SetFloat("Vel_Y", rb.velocity.y);
@@ -105,13 +105,6 @@ public class Controller_2D : MonoBehaviour
             is_guarding = true;
         }
         else is_guarding = false;
-
-        if (Input.GetButtonDown("Special") && player_gauge.current_gauge >= 400 && !wall_sliding && !is_dashing && !is_waiting)
-        {
-            is_attacking = true;
-            player_gauge.Reduce(400);
-            StartCoroutine(Special());
-        }
 
         if (Input.GetButtonDown("Dash") && player_gauge.current_gauge >= 200 && !wall_sliding && !is_dashing && !is_waiting)
         {
@@ -148,7 +141,7 @@ public class Controller_2D : MonoBehaviour
         else
         {
             anim_controller.SetBool("Guard", false);
-            moveSpeed_horizontal = 450;
+            moveSpeed_horizontal = 500;
         }
 
         if (is_dashing) rb.velocity = dashing_direction.normalized * dashing_velocity; // DASH
@@ -200,27 +193,12 @@ public class Controller_2D : MonoBehaviour
         is_attacking = false;
     }
 
-    // SPECIAL ATTACK
-    IEnumerator Special() // A CHANGER VOIR GDOC
-    {
-        yield return new WaitForSeconds(0.5f);
-        Collider2D[] hit_enemies = Physics2D.OverlapCircleAll(special_attack_point.position, attack_range * 10, enemy_layers); // LIST OF ALL ENEMIES HIT
-        foreach (Collider2D enemy in hit_enemies) // FOR EACH ENEMIES HIT
-        {
-            enemy.GetComponent<Enemy>().TakeDamage(damage_point * 5); // TAKES THE TakeDamage(int damage) FUNCTION IN THE ENEMY'S SCRIPT TO GIVE DAMAGE TO THE ENEMY
-        }
-        is_waiting = true; // COOLDOWN
-        yield return new WaitForSeconds(2);
-        is_waiting = false;
-        is_attacking = false;
-    }
-
     // DASH
     IEnumerator Dash()
     {
         dashing_direction = new Vector2(Input.GetAxisRaw("Horizontal"), 0); // DIRECTION OF THE DASH
-        if (dashing_direction == Vector2.zero) dashing_direction = new Vector2(transform.localScale.x * direction, 0); // IF THE PLAYER IS NOT MOVING, HE WILL DASH WHERE HE'S TURNED
         yield return new WaitForSeconds(dashing_time);
+        if (dashing_direction == Vector2.zero) dashing_direction = new Vector2(transform.localScale.x * direction, 0); // IF THE PLAYER IS NOT MOVING, HE WILL DASH WHERE HE'S TURNED
         Collider2D[] hit_enemies = Physics2D.OverlapCircleAll(attack_point.position, attack_range, enemy_layers); // LIST OF ALL ENEMIES HIT
         foreach (Collider2D enemy in hit_enemies) // FOR EACH ENEMIES HIT
         {
