@@ -4,16 +4,35 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
+    Rigidbody2D rb;
     [SerializeField] int health_max;
     [SerializeField] int health;
 
     public Rigidbody2D health_orb;
     public Rigidbody2D gauge_orb;
 
+    [SerializeField] bool facing_right = true;
+    [SerializeField] Transform attack_point;
+
     // Start is called before the first frame update
     void Start()
     {
+        rb = GetComponent<Rigidbody2D>();
         health = health_max; // THE ENEMY STARTS WITH A FULL HEALTH
+    }
+
+    private void Update()
+    {
+        if (rb.velocity.x > 0 && !facing_right) Flip(); // PLAYER MOVING TO THE RIGHT
+        else if (rb.velocity.x < 0 && facing_right) Flip(); // PLAYER MOVING TO THE LEFT
+    }
+
+    // FLIP
+    void Flip()
+    {
+        attack_point.localPosition = -attack_point.localPosition;
+        facing_right = !facing_right;
+        //sr.flipX = !sr.flipX; // SPRITE
     }
 
     // TAKING DAMAGE

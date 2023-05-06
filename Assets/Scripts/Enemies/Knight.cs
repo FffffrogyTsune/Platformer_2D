@@ -10,8 +10,14 @@ public class Knight : MonoBehaviour
     public Transform target;
     public float height;
     Transform mob_transform;
-    float horizontal_value = 1f;
-    Vector2 ref_velocity = Vector2.zero;
+    [SerializeField] bool is_attacking;
+
+    [Header("Attack Settings")]
+    [SerializeField] int damage_point = 35;
+    [SerializeField] Transform attack_point;
+    [SerializeField] LayerMask enemy_layers;
+    float attack_range = 1.2f;
+    float next_attack_time = 0f;
 
     // Start is called before the first frame update
     void Start()
@@ -31,12 +37,17 @@ public class Knight : MonoBehaviour
 
     private void FixedUpdate()
     {
-        //Vector2 target_velocity = new Vector2(horizontal_value * speed * Time.deltaTime, rb.velocity.y);
-        //rb.velocity = Vector2.SmoothDamp(rb.velocity, target_velocity, ref ref_velocity, 0.05f); // BASIC MOVEMENT
+
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    void Attack()
     {
-        //horizontal_value = -horizontal_value;
+        Collider2D[] hit_player = Physics2D.OverlapCircleAll(attack_point.position, attack_range, enemy_layers); // LIST OF ALL ENEMIES HIT
+        foreach (Collider2D player in hit_player) // IF PLAYER TOUCHED
+        {
+            player.GetComponent<Player_Health>().TakeDamage(damage_point); // TAKES THE TakeDamage(int damage) FUNCTION IN THE ENEMY'S SCRIPT TO GIVE DAMAGE TO THE ENEMY
+        }
+        next_attack_time = Time.time + 2f; // LIMITS THE NUMBER OF ATTACKS AT 4 PER SECONDS
+        is_attacking = false;
     }
 }

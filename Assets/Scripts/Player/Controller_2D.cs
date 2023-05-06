@@ -24,7 +24,7 @@ public class Controller_2D : MonoBehaviour
     bool is_jumping = false;
 
     [Header("Status Settings")]
-    Vector2 respawn_point = new Vector2 (-73.5f, 2.5f);
+    Vector2 respawn_point = new Vector2 (-71f, -4.5f);
     [SerializeField] bool grounded;
     [SerializeField] Transform ground_check;
     [SerializeField] LayerMask what_is_ground;
@@ -71,7 +71,7 @@ public class Controller_2D : MonoBehaviour
         horizontal_value = Input.GetAxis("Horizontal");
 
         if (horizontal_value > 0 && !facing_right) Flip(); // PLAYER MOVING TO THE RIGHT
-        else if (horizontal_value < -0 && facing_right) Flip(); // PLAYER MOVING TO THE LEFT
+        else if (horizontal_value < 0 && facing_right) Flip(); // PLAYER MOVING TO THE LEFT
 
         anim_controller.SetFloat("Speed", Mathf.Abs(horizontal_value));
         anim_controller.SetFloat("Vel_Y", rb.velocity.y);
