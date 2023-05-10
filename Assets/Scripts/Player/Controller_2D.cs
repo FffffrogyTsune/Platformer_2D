@@ -151,7 +151,7 @@ public class Controller_2D : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Enemy") && !is_dashing && player_health.current_health > 0 && !is_invincible)
         {
-            player_health.TakeDamage(20);
+            player_health.TakeDamage(25);
             StartCoroutine(Invincible());
         }
     }
