@@ -14,7 +14,7 @@ public class Controller_2D : MonoBehaviour
     public Gauge_Bar gauge_bar;
 
     [Header("Movement Settings")]
-    [SerializeField] float moveSpeed_horizontal = 500;
+    [SerializeField] float moveSpeed_horizontal = 450;
     [SerializeField] float wall_sliding_speed;
     float horizontal_value;
     int direction;
@@ -141,7 +141,7 @@ public class Controller_2D : MonoBehaviour
         else
         {
             anim_controller.SetBool("Guard", false);
-            moveSpeed_horizontal = 500;
+            moveSpeed_horizontal = 450;
         }
 
         if (is_dashing) rb.velocity = dashing_direction.normalized * dashing_velocity; // DASH
