@@ -38,6 +38,7 @@ public class Controller_2D : MonoBehaviour
     [SerializeField] bool is_dashing;
     [SerializeField] bool is_waiting;
     [SerializeField] bool is_invincible;
+    bool is_holding_jump;
     float check_radius = 0.1f;
 
     [Header("Attack Settings")]
@@ -76,12 +77,13 @@ public class Controller_2D : MonoBehaviour
         anim_controller.SetFloat("Speed", Mathf.Abs(horizontal_value));
         anim_controller.SetFloat("Vel_Y", rb.velocity.y);
 
-        if (rb.velocity.y < 0) rb.gravityScale = 7;
+        if (rb.velocity.y < 0 && is_holding_jump) rb.gravityScale = 7;
         else rb.gravityScale = 6;
 
         grounded = Physics2D.OverlapCircle(ground_check.position, check_radius, what_is_ground); // IS THE PLAYER GROUNDED ?
         is_touching_front = Physics2D.OverlapCircle(front_check.position, check_radius, what_is_ground); // IS THE PLAYER TOUCHING A WALL ?
         is_touching_up = Physics2D.OverlapCircle(up_check.position, check_radius, what_is_ground); // IS THE PLAYER TOUCHING A CEILING ?
+        is_holding_jump = Input.GetButton("Jump");
 
         if (player_health.current_health <= 0)
         {
@@ -106,10 +108,10 @@ public class Controller_2D : MonoBehaviour
         }
         else is_guarding = false;
 
-        if (Input.GetButtonDown("Dash") && player_gauge.current_gauge >= 200 && !wall_sliding && !is_dashing && !is_waiting)
+        if (Input.GetButtonDown("Dash") && player_gauge.current_gauge >= 300 && !wall_sliding && !is_dashing && !is_waiting)
         {
             is_dashing = true;
-            player_gauge.Reduce(200);
+            player_gauge.Reduce(300);
             StartCoroutine(Dash());
         }
 
@@ -131,6 +133,11 @@ public class Controller_2D : MonoBehaviour
     {
         Vector2 target_velocity = new Vector2(horizontal_value * moveSpeed_horizontal * Time.deltaTime, rb.velocity.y);
         rb.velocity = Vector2.SmoothDamp(rb.velocity, target_velocity, ref ref_velocity, 0.05f); // BASIC MOVEMENT
+
+        if (!is_holding_jump && !grounded)
+        {
+            rb.AddForce(new Vector2(0, - 50), ForceMode2D.Force);
+        }
 
         // GUARD
         if (is_guarding && !wall_sliding)

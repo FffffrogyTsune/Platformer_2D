@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Player_Gauge : MonoBehaviour
 {
-    public int max_gauge = 1000;
+    public int max_gauge = 900;
     public int current_gauge;
 
     public Gauge_Bar gauge_bar;
@@ -33,7 +33,7 @@ public class Player_Gauge : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Gauge_orb") && current_gauge < max_gauge)
         {
-            AddGauge(25);
+            AddGauge(50);
             Destroy(collision.gameObject);
         }
     }
