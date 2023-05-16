@@ -16,7 +16,7 @@ public class Controller_2D : MonoBehaviour
     [Header("Movement Settings")]
     [SerializeField] float moveSpeed_horizontal = 450;
     [SerializeField] float wall_sliding_speed;
-    float horizontal_value;
+    [SerializeField] float horizontal_value;
     int direction;
     Vector2 ref_velocity = Vector2.zero;
     bool facing_right = true;
