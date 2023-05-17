@@ -8,6 +8,7 @@ public class Controller_2D : MonoBehaviour
     SpriteRenderer sr;
     CapsuleCollider2D cap;
     Animator anim_controller;
+    public Dash_UI dash_ui;
     public Player_Health player_health;
     public Health_Bar health_bar;
     public Player_Gauge player_gauge;
@@ -52,6 +53,7 @@ public class Controller_2D : MonoBehaviour
     [Header("Dash Settings")]
     [SerializeField] float dashing_velocity = 90f;
     [SerializeField] float dashing_time = 0.2f;
+    [SerializeField] bool cooling;
     Vector2 dashing_direction;
 
     // Start is called before the first frame update
@@ -127,6 +129,8 @@ public class Controller_2D : MonoBehaviour
             wall_sliding = false;
             anim_controller.SetBool("Wall_Slide", false);
         }
+
+        if (player_gauge.current_gauge >= 300 && !cooling) dash_ui.SetTrue();
     }
 
     void FixedUpdate()
@@ -136,7 +140,7 @@ public class Controller_2D : MonoBehaviour
 
         if (!is_holding_jump && !grounded)
         {
-            rb.AddForce(new Vector2(0, - 50), ForceMode2D.Force);
+            rb.AddForce(new Vector2(0, -50), ForceMode2D.Force);
         }
 
         // GUARD
@@ -151,7 +155,12 @@ public class Controller_2D : MonoBehaviour
             moveSpeed_horizontal = 450;
         }
 
-        if (is_dashing) rb.velocity = dashing_direction.normalized * dashing_velocity; // DASH
+        if (is_dashing)
+        {
+            rb.velocity = dashing_direction.normalized * dashing_velocity; // DASH
+            StartCoroutine(dash_ui.DashCooldown());
+
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -203,6 +212,7 @@ public class Controller_2D : MonoBehaviour
     // DASH
     IEnumerator Dash()
     {
+        cooling = true;
         dashing_direction = new Vector2(Input.GetAxisRaw("Horizontal"), 0); // DIRECTION OF THE DASH
         yield return new WaitForSeconds(dashing_time);
         if (dashing_direction == Vector2.zero) dashing_direction = new Vector2(transform.localScale.x * direction, 0); // IF THE PLAYER IS NOT MOVING, HE WILL DASH WHERE HE'S TURNED
@@ -213,8 +223,9 @@ public class Controller_2D : MonoBehaviour
         }
         is_dashing = false;
         is_waiting = true; // COOLDOWN
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(3);
         is_waiting = false;
+        cooling = false;
     }
 
     // INVINCIBILITY
