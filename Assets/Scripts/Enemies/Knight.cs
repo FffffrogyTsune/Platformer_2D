@@ -13,7 +13,7 @@ public class Knight : MonoBehaviour
     [SerializeField] bool is_attacking;
 
     [Header("Attack Settings")]
-    [SerializeField] int damage_point = 35;
+    [SerializeField] int damage_point;
     [SerializeField] Transform attack_point;
     [SerializeField] LayerMask enemy_layers;
     float attack_range = 1.2f;
