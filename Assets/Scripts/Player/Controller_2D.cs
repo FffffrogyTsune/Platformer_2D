@@ -22,6 +22,8 @@ public class Controller_2D : MonoBehaviour
     Vector2 ref_velocity = Vector2.zero;
     bool facing_right = true;
     float jumpForce = 23.5f;
+    float coyote_time = 0.12f;
+    float coyote_time_counter;
     bool is_jumping = false;
 
     [Header("Status Settings")]
@@ -52,7 +54,7 @@ public class Controller_2D : MonoBehaviour
 
     [Header("Dash Settings")]
     [SerializeField] float dashing_velocity = 90f;
-    [SerializeField] float dashing_time = 0.2f;
+    [SerializeField] float dashing_time = 0.1f;
     [SerializeField] bool cooling;
     Vector2 dashing_direction;
 
@@ -92,7 +94,16 @@ public class Controller_2D : MonoBehaviour
             StartCoroutine(PlayerDie());
         }
 
-        if (Input.GetButtonDown("Jump") && grounded && !is_touching_up)
+        if (grounded)
+        {
+            coyote_time_counter = coyote_time;
+        }
+        else
+        {
+            coyote_time_counter -= Time.deltaTime;
+        }
+
+        if (Input.GetButtonDown("Jump") && coyote_time_counter > 0f && !is_touching_up)
         {
             is_jumping = true;
             Jump();
@@ -142,6 +153,7 @@ public class Controller_2D : MonoBehaviour
         {
             rb.AddForce(new Vector2(0, -50), ForceMode2D.Force);
         }
+        else coyote_time_counter = 0f;
 
         // GUARD
         if (is_guarding && !wall_sliding)
@@ -183,6 +195,7 @@ public class Controller_2D : MonoBehaviour
     // JUMP
     void Jump()
     {
+        rb.velocity = new Vector2(rb.velocity.x, 0);
         rb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse); // NORMAL JUMP
         is_jumping = false;
     }
