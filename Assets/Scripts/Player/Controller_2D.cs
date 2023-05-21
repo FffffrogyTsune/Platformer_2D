@@ -27,7 +27,7 @@ public class Controller_2D : MonoBehaviour
     bool is_jumping = false;
 
     [Header("Status Settings")]
-    Vector2 respawn_point = new Vector2 (-71f, -4.5f);
+    public Vector2 respawn_point = new Vector2 (-71f, -4.5f);
     [SerializeField] bool grounded;
     [SerializeField] Transform ground_check;
     [SerializeField] LayerMask what_is_ground;
@@ -181,14 +181,6 @@ public class Controller_2D : MonoBehaviour
         {
             player_health.TakeDamage(25);
             StartCoroutine(Invincible());
-        }
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.gameObject.CompareTag("Checkpoint") && player_health.current_health > 0)
-        {
-            respawn_point = collision.gameObject.transform.position;
         }
     }
 
