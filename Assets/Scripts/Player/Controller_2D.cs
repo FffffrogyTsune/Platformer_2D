@@ -216,8 +216,6 @@ public class Controller_2D : MonoBehaviour
         {
             enemy.GetComponent<Enemy>().TakeDamage(damage_point); // TAKES THE TakeDamage(int damage) FUNCTION IN THE ENEMY'S SCRIPT TO GIVE DAMAGE TO THE ENEMY
         }
-
-        anim_controller.SetBool("Attack", false);
         next_attack_time = Time.time + 0.25f; // LIMITS THE NUMBER OF ATTACKS AT 4 PER SECONDS
         is_attacking = false;
     }
@@ -259,6 +257,7 @@ public class Controller_2D : MonoBehaviour
         health_bar.SetHealth(player_health.current_health);
         player_gauge.current_gauge = 300;
         gauge_bar.SetGauge(player_gauge.current_gauge);
+        anim_controller.SetTrigger("Revive");
         yield return new WaitForSeconds(0.1f);
         is_dying = false;
     }
