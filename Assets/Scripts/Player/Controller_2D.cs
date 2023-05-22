@@ -111,12 +111,14 @@ public class Controller_2D : MonoBehaviour
         if (Input.GetButtonDown("Jump") && coyote_time_counter > 0f && !is_touching_up)
         {
             is_jumping = true;
+            anim_controller.SetTrigger("Ascent");
             Jump();
         }
 
         if (Input.GetButtonDown("Attack") && Time.time >= next_attack_time && !wall_sliding && !is_guarding && !is_dashing && !is_waiting)
         {
             is_attacking = true;
+            anim_controller.SetTrigger("Attack");
             Attack();
         }
 
@@ -176,7 +178,6 @@ public class Controller_2D : MonoBehaviour
         {
             rb.velocity = dashing_direction.normalized * dashing_velocity; // DASH
             StartCoroutine(dash_ui.DashCooldown());
-
         }
     }
 
@@ -215,6 +216,8 @@ public class Controller_2D : MonoBehaviour
         {
             enemy.GetComponent<Enemy>().TakeDamage(damage_point); // TAKES THE TakeDamage(int damage) FUNCTION IN THE ENEMY'S SCRIPT TO GIVE DAMAGE TO THE ENEMY
         }
+
+        anim_controller.SetBool("Attack", false);
         next_attack_time = Time.time + 0.25f; // LIMITS THE NUMBER OF ATTACKS AT 4 PER SECONDS
         is_attacking = false;
     }
@@ -249,9 +252,8 @@ public class Controller_2D : MonoBehaviour
     // DEATH
     IEnumerator PlayerDie()
     {
-        anim_controller.SetBool("Death", true);
+        anim_controller.SetTrigger("Death");
         yield return new WaitForSeconds(1.5f);
-        anim_controller.SetBool("Death", false);
         transform.position = respawn_point;
         player_health.current_health = player_health.max_health - 30;
         health_bar.SetHealth(player_health.current_health);
