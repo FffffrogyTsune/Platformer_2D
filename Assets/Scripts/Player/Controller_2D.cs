@@ -13,6 +13,7 @@ public class Controller_2D : MonoBehaviour
     public Health_Bar health_bar;
     public Player_Gauge player_gauge;
     public Gauge_Bar gauge_bar;
+    public Death_Counter death_counter;
 
     [Header("Movement Settings")]
     [SerializeField] float moveSpeed_horizontal = 450;
@@ -41,6 +42,7 @@ public class Controller_2D : MonoBehaviour
     [SerializeField] bool is_dashing;
     [SerializeField] bool is_waiting;
     [SerializeField] bool is_invincible;
+    [SerializeField] bool is_dying;
     bool is_holding_jump;
     float check_radius = 0.1f;
 
@@ -89,9 +91,12 @@ public class Controller_2D : MonoBehaviour
         is_touching_up = Physics2D.OverlapCircle(up_check.position, check_radius, what_is_ground); // IS THE PLAYER TOUCHING A CEILING ?
         is_holding_jump = Input.GetButton("Jump");
 
-        if (player_health.current_health <= 0)
+        if (player_health.current_health <= 0 && !is_dying)
         {
+            is_dying = true;
             StartCoroutine(PlayerDie());
+            death_counter.death_count += 1;
+            death_counter.SetHitCounter(death_counter.death_count);
         }
 
         if (grounded)
@@ -247,11 +252,12 @@ public class Controller_2D : MonoBehaviour
         anim_controller.SetBool("Death", true);
         yield return new WaitForSeconds(1.5f);
         anim_controller.SetBool("Death", false);
+        transform.position = respawn_point;
         player_health.current_health = player_health.max_health - 30;
         health_bar.SetHealth(player_health.current_health);
         player_gauge.current_gauge = 300;
         gauge_bar.SetGauge(player_gauge.current_gauge);
-        transform.position = respawn_point;
         yield return new WaitForSeconds(0.1f);
+        is_dying = false;
     }
 }
