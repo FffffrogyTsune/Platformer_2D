@@ -38,7 +38,6 @@ public class Controller_2D : MonoBehaviour
     [SerializeField] Transform up_check;
     [SerializeField] bool wall_sliding;
     [SerializeField] bool is_attacking;
-    [SerializeField] bool is_guarding;
     [SerializeField] bool is_dashing;
     [SerializeField] bool is_waiting;
     [SerializeField] bool is_invincible;
@@ -117,18 +116,12 @@ public class Controller_2D : MonoBehaviour
             Jump();
         }
 
-        if (Input.GetButtonDown("Attack") && Time.time >= next_attack_time && !wall_sliding && !is_guarding && !is_dashing && !is_waiting)
+        if (Input.GetButtonDown("Attack") && Time.time >= next_attack_time && !wall_sliding && !is_dashing && !is_waiting)
         {
             is_attacking = true;
             anim_controller.SetTrigger("Attack");
             Attack();
         }
-
-        if (Input.GetButton("Shield"))
-        {
-            is_guarding = true;
-        }
-        else is_guarding = false;
 
         if (Input.GetButtonDown("Dash") && player_gauge.current_gauge >= 300 && !wall_sliding && !is_dashing && !is_waiting)
         {
@@ -163,18 +156,6 @@ public class Controller_2D : MonoBehaviour
             rb.AddForce(new Vector2(0, -50), ForceMode2D.Force);
         }
         else coyote_time_counter = 0f;
-
-        // GUARD
-        if (is_guarding && !wall_sliding)
-        {
-            anim_controller.SetBool("Guard", true);
-            moveSpeed_horizontal = 250;
-        }
-        else
-        {
-            anim_controller.SetBool("Guard", false);
-            moveSpeed_horizontal = 450;
-        }
 
         if (is_dashing)
         {
