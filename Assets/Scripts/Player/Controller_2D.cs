@@ -77,6 +77,8 @@ public class Controller_2D : MonoBehaviour
     {
         horizontal_value = Input.GetAxis("Horizontal");
 
+        if (is_dying) horizontal_value = 0;
+
         if (horizontal_value > 0 && !facing_right) Flip(); // PLAYER MOVING TO THE RIGHT
         else if (horizontal_value < 0 && facing_right) Flip(); // PLAYER MOVING TO THE LEFT
 
@@ -185,7 +187,7 @@ public class Controller_2D : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Enemy") && !is_dashing && player_health.current_health > 0 && !is_invincible)
         {
-            player_health.TakeDamage(25);
+            player_health.TakeDamage(20);
             StartCoroutine(Invincible());
         }
     }
@@ -251,7 +253,7 @@ public class Controller_2D : MonoBehaviour
     IEnumerator PlayerDie()
     {
         anim_controller.SetTrigger("Death");
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(3f);
         transform.position = respawn_point;
         player_health.current_health = player_health.max_health - 30;
         health_bar.SetHealth(player_health.current_health);

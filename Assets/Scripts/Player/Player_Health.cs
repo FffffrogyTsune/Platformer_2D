@@ -35,7 +35,7 @@ public class Player_Health : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Health_orb") && current_health < max_health)
         {
-            GetHealth(5);
+            GetHealth(10);
             Destroy(collision.gameObject);
         }
     }
