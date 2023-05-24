@@ -6,7 +6,7 @@ public class Player_Gauge : MonoBehaviour
 {
     public int max_gauge = 900;
     public int current_gauge;
-
+    float next_add_time = 0f;
     public Gauge_Bar gauge_bar;
 
 
@@ -27,6 +27,13 @@ public class Player_Gauge : MonoBehaviour
         {
             current_gauge = max_gauge;
         }
+
+        if (current_gauge < max_gauge && next_add_time >= 2)
+        {
+            AddGauge(10);
+            next_add_time = 0;
+        }
+        else next_add_time += Time.deltaTime;
     }
 
     private void OnTriggerStay2D(Collider2D collision)
