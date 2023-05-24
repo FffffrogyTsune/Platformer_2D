@@ -54,7 +54,7 @@ public class Controller_2D : MonoBehaviour
     float next_attack_time = 0f;
 
     [Header("Dash Settings")]
-    [SerializeField] float dashing_velocity = 90f;
+    [SerializeField] float dashing_velocity = 80f;
     [SerializeField] float dashing_time = 0.1f;
     [SerializeField] bool cooling;
     Vector2 dashing_direction;
