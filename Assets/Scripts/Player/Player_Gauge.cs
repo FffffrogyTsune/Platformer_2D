@@ -8,11 +8,7 @@ public class Player_Gauge : MonoBehaviour
     public int current_gauge;
     float next_add_time = 0f;
     public Gauge_Bar gauge_bar;
-
-
-
     
-
     // Start is called before the first frame update
     void Start()
     {
@@ -38,9 +34,12 @@ public class Player_Gauge : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Gauge_orb") && current_gauge < max_gauge)
+        if (collision.gameObject.CompareTag("Gauge_orb"))
         {
-            AddGauge(50);
+            if (current_gauge < max_gauge)
+            {
+                AddGauge(50);
+            }
             Destroy(collision.gameObject);
         }
     }

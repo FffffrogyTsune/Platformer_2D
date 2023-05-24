@@ -10,6 +10,7 @@ public class Enemy : MonoBehaviour
 
     public Rigidbody2D health_orb;
     public Rigidbody2D gauge_orb;
+    public Rigidbody2D coin;
 
     [SerializeField] bool facing_right = true;
     [SerializeField] Transform attack_point;
@@ -58,6 +59,12 @@ public class Enemy : MonoBehaviour
         {
             Rigidbody2D G_orb = Instantiate(gauge_orb, transform.position, transform.rotation);
             G_orb.velocity = new Vector2(Random.Range(-10, 10), 28);
+        }
+
+        for (int i = 0; i <= 2; i++)
+        {
+            Rigidbody2D Coin_0 = Instantiate(coin, transform.position, transform.rotation);
+            Coin_0.velocity = new Vector2(Random.Range(-5, 5), 15);
         }
 
         GetComponent<CapsuleCollider2D>().enabled = false; // DEACTIVATE THE BOX COLLIDER 2D

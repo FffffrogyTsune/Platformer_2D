@@ -33,9 +33,12 @@ public class Player_Health : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Health_orb") && current_health < max_health)
+        if (collision.gameObject.CompareTag("Health_orb"))
         {
-            GetHealth(10);
+            if (current_health < max_health)
+            {
+                GetHealth(10);
+            }
             Destroy(collision.gameObject);
         }
     }

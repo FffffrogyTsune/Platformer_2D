@@ -14,6 +14,7 @@ public class Controller_2D : MonoBehaviour
     public Player_Gauge player_gauge;
     public Gauge_Bar gauge_bar;
     public Death_Counter death_counter;
+    public Coin_Counter coin_counter;
 
     [Header("Movement Settings")]
     public float moveSpeed_horizontal = 450;
@@ -134,9 +135,9 @@ public class Controller_2D : MonoBehaviour
             anim_controller.SetTrigger("Attack_0" + combo.ToString());
             Attack();
         }
-        
 
-        if (Input.GetButtonDown("Dash") && player_gauge.current_gauge >= 300 && !wall_sliding && !is_dashing && !is_waiting)
+
+        if (Input.GetButtonDown("Dash") && horizontal_value != 0 && player_gauge.current_gauge >= 300 && !wall_sliding && !is_dashing && !is_waiting)
         {
             is_dashing = true;
             player_gauge.Reduce(300);
@@ -186,6 +187,16 @@ public class Controller_2D : MonoBehaviour
         }
     }
 
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Coin"))
+        {
+            coin_counter.coin_count += 1;
+            coin_counter.SetCoinCounter(coin_counter.coin_count);
+            Destroy(collision.gameObject);
+        }
+    }
+
     // JUMP
     void Jump()
     {
@@ -213,7 +224,7 @@ public class Controller_2D : MonoBehaviour
             enemy.GetComponent<Enemy>().TakeDamage(damage_point); // TAKES THE TakeDamage(int damage) FUNCTION IN THE ENEMY'S SCRIPT TO GIVE DAMAGE TO THE ENEMY
         }
         next_attack_time = Time.time + 0.2f; // LIMITS THE NUMBER OF ATTACKS PER SECONDS
-        next_combo_time = Time.time + 0.48f;
+        next_combo_time = Time.time + 0.5f;
         is_attacking = false;
     }
 
