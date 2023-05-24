@@ -16,7 +16,7 @@ public class Controller_2D : MonoBehaviour
     public Death_Counter death_counter;
 
     [Header("Movement Settings")]
-    [SerializeField] float moveSpeed_horizontal = 450;
+    public float moveSpeed_horizontal = 450;
     [SerializeField] float wall_sliding_speed;
     [SerializeField] float horizontal_value;
     int direction;
@@ -199,7 +199,7 @@ public class Controller_2D : MonoBehaviour
         {
             enemy.GetComponent<Enemy>().TakeDamage(damage_point); // TAKES THE TakeDamage(int damage) FUNCTION IN THE ENEMY'S SCRIPT TO GIVE DAMAGE TO THE ENEMY
         }
-        next_attack_time = Time.time + 0.25f; // LIMITS THE NUMBER OF ATTACKS AT 4 PER SECONDS
+        next_attack_time = Time.time + 0.27f; // LIMITS THE NUMBER OF ATTACKS PER SECONDS
         is_attacking = false;
     }
 

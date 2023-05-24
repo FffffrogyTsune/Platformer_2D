@@ -8,6 +8,7 @@ TagManager:
   - Gauge_orb
   - Enemy
   - Checkpoint
+  - Box
   layers:
   - Default
   - TransparentFX
