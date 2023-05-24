@@ -116,7 +116,7 @@ public class Controller_2D : MonoBehaviour
             Jump();
         }
 
-        if (Input.GetButtonDown("Attack") && Time.time >= next_attack_time && !wall_sliding && !is_dashing && !is_waiting)
+        if (Input.GetButtonDown("Attack") && Time.time >= next_attack_time && !wall_sliding && !is_dashing)
         {
             is_attacking = true;
             anim_controller.SetTrigger("Attack");
