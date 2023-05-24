@@ -52,6 +52,8 @@ public class Controller_2D : MonoBehaviour
     [SerializeField] LayerMask enemy_layers;
     float attack_range = 1.2f;
     float next_attack_time = 0f;
+    float next_combo_time = 0f;
+    [SerializeField] int combo = 0;
 
     [Header("Dash Settings")]
     [SerializeField] float dashing_velocity = 70f;
@@ -77,6 +79,9 @@ public class Controller_2D : MonoBehaviour
         horizontal_value = Input.GetAxis("Horizontal");
 
         if (is_dying) horizontal_value = 0;
+
+        if (next_combo_time >= Time.time) moveSpeed_horizontal = 220;
+        else moveSpeed_horizontal = 450;
 
         if (horizontal_value > 0 && !facing_right) Flip(); // PLAYER MOVING TO THE RIGHT
         else if (horizontal_value < 0 && facing_right) Flip(); // PLAYER MOVING TO THE LEFT
@@ -115,13 +120,21 @@ public class Controller_2D : MonoBehaviour
             anim_controller.SetTrigger("Ascent");
             Jump();
         }
+        
+        if (Time.time > next_combo_time || combo == 2)
+        {
+            combo = 0;
+        }
 
         if (Input.GetButtonDown("Attack") && Time.time >= next_attack_time && !wall_sliding && !is_dashing)
         {
             is_attacking = true;
-            anim_controller.SetTrigger("Attack");
+            combo += 1;
+            next_combo_time = Time.time;
+            anim_controller.SetTrigger("Attack_0" + combo.ToString());
             Attack();
         }
+        
 
         if (Input.GetButtonDown("Dash") && player_gauge.current_gauge >= 300 && !wall_sliding && !is_dashing && !is_waiting)
         {
@@ -199,7 +212,8 @@ public class Controller_2D : MonoBehaviour
         {
             enemy.GetComponent<Enemy>().TakeDamage(damage_point); // TAKES THE TakeDamage(int damage) FUNCTION IN THE ENEMY'S SCRIPT TO GIVE DAMAGE TO THE ENEMY
         }
-        next_attack_time = Time.time + 0.27f; // LIMITS THE NUMBER OF ATTACKS PER SECONDS
+        next_attack_time = Time.time + 0.2f; // LIMITS THE NUMBER OF ATTACKS PER SECONDS
+        next_combo_time = Time.time + 0.48f;
         is_attacking = false;
     }
 

@@ -209,6 +209,27 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: sprite_marth_animation_attack_01-Sheet_5
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 0
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 93d516595ce577f4bb8fd5bb1e5dfdfe
+      internalID: -313244994
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -221,6 +242,7 @@ TextureImporter:
     secondaryTextures: []
     nameFileIdTable:
       sprite_marth_animation_attack_01-Sheet_4: -1688195335
+      sprite_marth_animation_attack_01-Sheet_5: -313244994
       sprite_marth_animation_attack_01-Sheet_1: 1826678008
       sprite_marth_animation_attack_01-Sheet_0: -690870290
       sprite_marth_animation_attack_01-Sheet_3: 1703609131
