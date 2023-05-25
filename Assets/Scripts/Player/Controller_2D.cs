@@ -50,7 +50,7 @@ public class Controller_2D : MonoBehaviour
     [SerializeField] Transform attack_point;
     [SerializeField] Transform special_attack_point;
     [SerializeField] LayerMask enemy_layers;
-    float attack_range = 1.2f;
+    float attack_range = 0.7f;
     float next_attack_time = 0f;
     float next_combo_time = 0f;
     [SerializeField] int combo = 0;
@@ -202,8 +202,8 @@ public class Controller_2D : MonoBehaviour
     // FLIP
     void Flip()
     {
-        front_check.localPosition = -front_check.localPosition;
-        attack_point.localPosition = -attack_point.localPosition;
+        front_check.localPosition = new Vector2(-front_check.localPosition.x, front_check.localPosition.y);
+        attack_point.localPosition = new Vector2(-attack_point.localPosition.x, attack_point.localPosition.y);
         facing_right = !facing_right;
         direction = -direction;
         sr.flipX = !sr.flipX; // SPRITE
