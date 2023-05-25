@@ -11,9 +11,9 @@ public class Enemy : MonoBehaviour
     public Rigidbody2D health_orb;
     public Rigidbody2D gauge_orb;
     public Rigidbody2D coin;
+    public int drop_coin;
 
     [SerializeField] bool facing_right = true;
-    [SerializeField] Transform attack_point;
 
     // Start is called before the first frame update
     void Start()
@@ -31,7 +31,6 @@ public class Enemy : MonoBehaviour
     // FLIP
     void Flip()
     {
-        attack_point.localPosition = -attack_point.localPosition;
         facing_right = !facing_right;
         //sr.flipX = !sr.flipX; // SPRITE
     }
@@ -49,22 +48,24 @@ public class Enemy : MonoBehaviour
     // DYING
     void Die()
     {
-        for (int i = 0; i <= Random.Range(0, 2); i++)
+        if (gauge_orb != null && health_orb != null)
         {
-            Rigidbody2D H_orb = Instantiate(health_orb, transform.position, transform.rotation);
-            H_orb.velocity = new Vector2(Random.Range(-10,10), 28);
-        }
+            for (int i = 0; i <= Random.Range(0, 2); i++)
+            {
+                Rigidbody2D H_orb = Instantiate(health_orb, transform.position, transform.rotation);
+                H_orb.velocity = new Vector2(Random.Range(-5, 5), 12);
+            }
+            for (int i = 0; i <= Random.Range(0, 2); i++)
+            {
+                Rigidbody2D G_orb = Instantiate(gauge_orb, transform.position, transform.rotation);
+                G_orb.velocity = new Vector2(Random.Range(-5, 5), 12);
+            }
+        }  
 
-        for (int i = 0; i <= Random.Range(0, 2); i++)
+        for (int i = 0; i < drop_coin; i++)
         {
-            Rigidbody2D G_orb = Instantiate(gauge_orb, transform.position, transform.rotation);
-            G_orb.velocity = new Vector2(Random.Range(-10, 10), 28);
-        }
-
-        for (int i = 0; i <= 2; i++)
-        {
-            Rigidbody2D Coin_0 = Instantiate(coin, transform.position, transform.rotation);
-            Coin_0.velocity = new Vector2(Random.Range(-5, 5), 15);
+            Rigidbody2D Coin_0 = Instantiate(coin, transform.position + new Vector3(0, 1f), transform.rotation);
+            Coin_0.velocity = new Vector2(Random.Range(-4, 4), 7);
         }
 
         GetComponent<CapsuleCollider2D>().enabled = false; // DEACTIVATE THE BOX COLLIDER 2D

@@ -14,7 +14,6 @@ public class Controller_2D : MonoBehaviour
     public Player_Gauge player_gauge;
     public Gauge_Bar gauge_bar;
     public Death_Counter death_counter;
-    public Coin_Counter coin_counter;
 
     [Header("Movement Settings")]
     public float moveSpeed_horizontal = 450;
@@ -189,12 +188,7 @@ public class Controller_2D : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Coin"))
-        {
-            coin_counter.coin_count += 1;
-            coin_counter.SetCoinCounter(coin_counter.coin_count);
-            Destroy(collision.gameObject);
-        }
+        
     }
 
     // JUMP
