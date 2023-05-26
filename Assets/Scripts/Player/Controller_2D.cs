@@ -50,6 +50,7 @@ public class Controller_2D : MonoBehaviour
     [SerializeField] Transform attack_point;
     [SerializeField] Transform special_attack_point;
     [SerializeField] LayerMask enemy_layers;
+    [SerializeField] LayerMask box_layers;
     float attack_range = 0.7f;
     float next_attack_time = 0f;
     float next_combo_time = 0f;
@@ -217,6 +218,11 @@ public class Controller_2D : MonoBehaviour
         {
             enemy.GetComponent<Enemy>().TakeDamage(damage_point); // TAKES THE TakeDamage(int damage) FUNCTION IN THE ENEMY'S SCRIPT TO GIVE DAMAGE TO THE ENEMY
         }
+        Collider2D[] hit_box = Physics2D.OverlapCircleAll(attack_point.position, attack_range, box_layers); // LIST OF ALL BOX HIT
+        foreach (Collider2D box in hit_box) // FOR EACH BOX HIT
+        {
+            box.GetComponent<Box>().Break(); // TAKES THE Break() FUNCTION IN THE BOX'S SCRIPT TO BREAK THE BOX
+        }
         next_attack_time = Time.time + 0.2f; // LIMITS THE NUMBER OF ATTACKS PER SECONDS
         next_combo_time = Time.time + 0.5f;
         is_attacking = false;
@@ -233,6 +239,11 @@ public class Controller_2D : MonoBehaviour
         foreach (Collider2D enemy in hit_enemies) // FOR EACH ENEMIES HIT
         {
             enemy.GetComponent<Enemy>().TakeDamage(50); // TAKES THE TakeDamage(int damage) FUNCTION IN THE ENEMY'S SCRIPT TO GIVE DAMAGE TO THE ENEMY
+        }
+        Collider2D[] hit_box = Physics2D.OverlapCircleAll(attack_point.position, attack_range, box_layers); // LIST OF ALL BOX HIT
+        foreach (Collider2D box in hit_box) // FOR EACH BOX HIT
+        {
+            box.GetComponent<Box>().Break(); // TAKES THE Break() FUNCTION IN THE BOX'S SCRIPT TO BREAK THE BOX
         }
         is_dashing = false;
         is_waiting = true; // COOLDOWN
