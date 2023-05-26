@@ -7,8 +7,6 @@ public class Checkpoint : MonoBehaviour
     [SerializeField] Controller_2D controller_2d;
     SpriteRenderer sr;
     public Sprite activated;
-
-    public GameObject enemy;
     [SerializeField] GameObject[] enemies;
 
     private void Start()

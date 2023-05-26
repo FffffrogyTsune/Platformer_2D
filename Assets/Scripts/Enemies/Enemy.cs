@@ -48,6 +48,7 @@ public class Enemy : MonoBehaviour
     // TAKING DAMAGE
     public void TakeDamage(int damage)
     {
+        rb.velocity = Vector2.zero;
         health -= damage;
         if (health <= 0) // WHEN THE ENEMY HAS NO HEALTH, HE DIES
         {
