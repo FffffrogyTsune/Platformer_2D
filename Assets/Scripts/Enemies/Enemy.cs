@@ -5,8 +5,10 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     Rigidbody2D rb;
+    public Controller_2D controller_2d;
     [SerializeField] int health_max;
-    [SerializeField] int health;
+    public int health;
+    [SerializeField] Vector2 respawn_point;
 
     public Rigidbody2D health_orb;
     public Rigidbody2D gauge_orb;
@@ -26,6 +28,14 @@ public class Enemy : MonoBehaviour
     {
         if (rb.velocity.x > 0 && !facing_right) Flip(); // PLAYER MOVING TO THE RIGHT
         else if (rb.velocity.x < 0 && facing_right) Flip(); // PLAYER MOVING TO THE LEFT
+
+        if (controller_2d.can_ai_respawn)
+        {
+            transform.localPosition = respawn_point;
+            rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+            health = health_max;
+            GetComponent<CapsuleCollider2D>().enabled = true; // REACTIVATE THE BOX COLLIDER 2D
+        }
     }
 
     // FLIP
@@ -68,8 +78,7 @@ public class Enemy : MonoBehaviour
             Coin_0.velocity = new Vector2(Random.Range(-4, 4), 7);
         }
 
+        rb.constraints = RigidbodyConstraints2D.FreezePosition;
         GetComponent<CapsuleCollider2D>().enabled = false; // DEACTIVATE THE BOX COLLIDER 2D
-        this.enabled = false; // DEACTIVATE THIS SCRIPT
-        Destroy(gameObject);
     }
 }

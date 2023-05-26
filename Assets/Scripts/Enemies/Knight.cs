@@ -5,18 +5,18 @@ using UnityEngine;
 public class Knight : MonoBehaviour
 {
     Rigidbody2D rb;
+    Enemy enemy;
 
     [SerializeField] float speed;
     public Transform target;
     public float height;
-    Transform mob_transform;
     [SerializeField] bool is_attacking;
     [SerializeField] bool stun = false;
 
     [Header("Attack Settings")]
     [SerializeField] int damage_point;
     [SerializeField] Transform attack_point;
-    [SerializeField] LayerMask enemy_layers;
+    [SerializeField] LayerMask player_layers;
     public float attack_range;
     public float cooldown_time;
     float next_attack_time = 0f;
@@ -26,7 +26,7 @@ public class Knight : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        mob_transform = transform;
+        enemy = GetComponent<Enemy>();
     }
 
     // Update is called once per frame
@@ -37,27 +37,25 @@ public class Knight : MonoBehaviour
             stun = false;
         }
 
-        if (Vector2.Distance(transform.position, target.position) < 15 && Vector2.Distance(transform.position, target.position) > 2.5f && !stun && !is_attacking)
+        if (enemy.health > 0)
         {
-            transform.position = Vector2.MoveTowards(transform.position, new Vector2(target.position.x, height), speed * Time.deltaTime); // FOLLOWING THE PLAYER
+            if (Vector2.Distance(transform.position, target.position) < 15 && Vector2.Distance(transform.position, target.position) > 2.5f && !stun && !is_attacking)
+            {
+                transform.position = Vector2.MoveTowards(transform.position, new Vector2(target.position.x, height), speed * Time.deltaTime); // FOLLOWING THE PLAYER
+            }
+
+            if (Vector2.Distance(transform.position, target.position) <= 2.7f && Time.time >= next_attack_time && !is_attacking && !stun)
+            {
+                is_attacking = true;
+                StartCoroutine(Attack());
+            }
         }
-
-        if (Vector2.Distance(transform.position, target.position) <= 2.7f && Time.time >= next_attack_time && !is_attacking && !stun)
-        {
-            is_attacking = true;
-            StartCoroutine(Attack());
-        }
-    }
-
-    private void FixedUpdate()
-    {
-
     }
 
     IEnumerator Attack()
     {
         yield return new WaitForSeconds(0.7f);
-        Collider2D[] hit_player = Physics2D.OverlapCircleAll(attack_point.position, attack_range, enemy_layers); // DETECTION OF THE PLAYER
+        Collider2D[] hit_player = Physics2D.OverlapCircleAll(attack_point.position, attack_range, player_layers); // DETECTION OF THE PLAYER
         foreach (Collider2D player in hit_player) // IF PLAYER TOUCHED
         {
             player.GetComponent<Player_Health>().TakeDamage(damage_point); // TAKES THE TakeDamage(int damage) FUNCTION IN THE PLAYER'S SCRIPT TO GIVE DAMAGE TO THE ENEMY

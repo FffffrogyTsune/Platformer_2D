@@ -42,6 +42,7 @@ public class Controller_2D : MonoBehaviour
     [SerializeField] bool is_waiting;
     [SerializeField] bool is_invincible;
     [SerializeField] bool is_dying;
+    public bool can_ai_respawn;
     bool is_holding_jump;
     float check_radius = 0.1f;
 
@@ -271,7 +272,10 @@ public class Controller_2D : MonoBehaviour
         player_gauge.current_gauge = 300;
         gauge_bar.SetGauge(player_gauge.current_gauge);
         anim_controller.SetTrigger("Revive");
-        yield return new WaitForSeconds(0.1f);
         is_dying = false;
+        can_ai_respawn = true;
+        yield return new WaitForSeconds(0.1f);
+        can_ai_respawn = false;
+        
     }
 }

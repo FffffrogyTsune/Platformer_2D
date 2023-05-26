@@ -8,6 +8,9 @@ public class Checkpoint : MonoBehaviour
     SpriteRenderer sr;
     public Sprite activated;
 
+    public GameObject enemy;
+    [SerializeField] GameObject[] enemies;
+
     private void Start()
     {
         sr = GetComponent<SpriteRenderer>();
@@ -19,8 +22,10 @@ public class Checkpoint : MonoBehaviour
         {
             controller_2d.respawn_point = transform.position;
             sr.sprite = activated;
-            
-            Debug.Log("check");
+            foreach (GameObject enemy in enemies)
+            {
+                if (enemy.GetComponent<Enemy>().health <=0) Destroy(enemy);
+            }
             Destroy(GetComponent<Checkpoint>());
         }
     }

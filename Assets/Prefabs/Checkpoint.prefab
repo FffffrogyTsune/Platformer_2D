@@ -272,4 +272,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   controller_2d: {fileID: 0}
   activated: {fileID: 21300000, guid: 16dd93d0d94d6c349bded42158e19d96, type: 3}
-  flame: {fileID: 0}
+  enemy: {fileID: 0}
+  enemies: []
