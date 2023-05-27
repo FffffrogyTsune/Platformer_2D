@@ -175,6 +175,7 @@ public class Controller_2D : MonoBehaviour
         if (is_dashing)
         {
             rb.velocity = dashing_direction.normalized * dashing_velocity; // DASH
+            anim_controller.SetTrigger("Dash");
             StartCoroutine(dash_ui.DashCooldown());
         }
     }
