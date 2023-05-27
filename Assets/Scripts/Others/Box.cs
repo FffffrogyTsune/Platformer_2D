@@ -27,7 +27,7 @@ public class Box : MonoBehaviour
             Coin_0.velocity = new Vector2(Random.Range(-4, 4), 7);
         }
 
-        GetComponent<CapsuleCollider2D>().enabled = false; // DEACTIVATE THE BOX COLLIDER 2D
+        GetComponent<BoxCollider2D>().enabled = false; // DEACTIVATE THE BOX COLLIDER 2D
         this.enabled = false; // DEACTIVATE THIS SCRIPT
         Destroy(gameObject);
     }
