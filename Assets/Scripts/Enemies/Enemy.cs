@@ -6,9 +6,11 @@ public class Enemy : MonoBehaviour
 {
     Rigidbody2D rb;
     public Controller_2D controller_2d;
-    [SerializeField] int health_max;
+    public int health_max;
     public int health;
-    [SerializeField] Vector2 respawn_point;
+    public bool respawning;
+    public bool dead;
+    public Vector2 respawn_point;
 
     public Rigidbody2D health_orb;
     public Rigidbody2D gauge_orb;
@@ -27,9 +29,12 @@ public class Enemy : MonoBehaviour
     private void Update()
     {
         rb.velocity = Vector2.zero;
+        respawning = false;
+        dead = false;
 
         if (controller_2d.can_ai_respawn)
         {
+            respawning = true;
             transform.localPosition = respawn_point;
             rb.constraints = RigidbodyConstraints2D.FreezeRotation;
             health = health_max;
@@ -58,6 +63,7 @@ public class Enemy : MonoBehaviour
     // DYING
     void Die()
     {
+        dead = true;
         if (gauge_orb != null && health_orb != null)
         {
             for (int i = 0; i <= Random.Range(0, 2); i++)

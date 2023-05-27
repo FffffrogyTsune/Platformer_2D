@@ -109,10 +109,12 @@ public class Controller_2D : MonoBehaviour
 
         if (grounded)
         {
+            anim_controller.SetBool("Grounded", true);
             coyote_time_counter = coyote_time;
         }
         else
         {
+            anim_controller.SetBool("Grounded", false);
             coyote_time_counter -= Time.deltaTime;
         }
 
