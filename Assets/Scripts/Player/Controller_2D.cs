@@ -40,7 +40,7 @@ public class Controller_2D : MonoBehaviour
     [SerializeField] bool is_attacking;
     [SerializeField] bool is_dashing;
     [SerializeField] bool is_waiting;
-    [SerializeField] bool is_invincible;
+    public bool is_invincible;
     [SerializeField] bool is_dying;
     public bool can_ai_respawn;
     bool is_holding_jump;
@@ -258,7 +258,7 @@ public class Controller_2D : MonoBehaviour
     IEnumerator Invincible()
     {
         is_invincible = true;
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(2f);
         is_invincible = false;
     }
 
