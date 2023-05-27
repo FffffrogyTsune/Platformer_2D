@@ -26,8 +26,7 @@ public class Enemy : MonoBehaviour
 
     private void Update()
     {
-        if (rb.velocity.x > 0 && !facing_right) Flip(); // PLAYER MOVING TO THE RIGHT
-        else if (rb.velocity.x < 0 && facing_right) Flip(); // PLAYER MOVING TO THE LEFT
+        rb.velocity = Vector2.zero;
 
         if (controller_2d.can_ai_respawn)
         {
