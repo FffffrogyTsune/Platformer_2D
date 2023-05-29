@@ -7,14 +7,18 @@ public class Pause_Menu : MonoBehaviour
 {
     public static bool paused = false;
     public GameObject pause_menu_ui;
-    public GameObject player;
+    public GameObject settings_menu;
+    public static bool settings_menu_activated;
 
     // Update is called once per frame
     void Update()
     {
         if (Input.GetButtonDown("Pause"))
         {
-            if (paused) Resume();
+            if (paused || settings_menu_activated)
+            {
+                Resume();
+            }
             else Pause();
         }
     }
@@ -22,6 +26,7 @@ public class Pause_Menu : MonoBehaviour
     public void Resume()
     {
         pause_menu_ui.SetActive(false);
+        settings_menu.SetActive(false);
         Time.timeScale = 1f;
         paused = false;
     }

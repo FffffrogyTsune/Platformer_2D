@@ -25,7 +25,6 @@ public class Controller_2D : MonoBehaviour
     float jumpForce = 23.5f;
     float coyote_time = 0.12f;
     float coyote_time_counter;
-    bool is_jumping = false;
 
     [Header("Status Settings")]
     public Vector2 respawn_point = new Vector2 (-71f, -4.5f);
@@ -37,7 +36,6 @@ public class Controller_2D : MonoBehaviour
     [SerializeField] bool is_touching_up;
     [SerializeField] Transform up_check;
     [SerializeField] bool wall_sliding;
-    [SerializeField] bool is_attacking;
     [SerializeField] bool is_dashing;
     [SerializeField] bool is_waiting;
     public bool is_invincible;
@@ -120,7 +118,6 @@ public class Controller_2D : MonoBehaviour
 
         if (Input.GetButtonDown("Jump") && coyote_time_counter > 0f && !is_touching_up)
         {
-            is_jumping = true;
             anim_controller.SetTrigger("Ascent");
             Jump();
         }
@@ -132,7 +129,6 @@ public class Controller_2D : MonoBehaviour
 
         if (Input.GetButtonDown("Attack") && Time.time >= next_attack_time && !wall_sliding && !is_dashing)
         {
-            is_attacking = true;
             combo += 1;
             next_combo_time = Time.time;
             anim_controller.SetTrigger("Attack_0" + combo.ToString());
@@ -191,17 +187,11 @@ public class Controller_2D : MonoBehaviour
         }
     }
 
-    private void OnTriggerStay2D(Collider2D collision)
-    {
-        
-    }
-
     // JUMP
     void Jump()
     {
         rb.velocity = new Vector2(rb.velocity.x, 0);
         rb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse); // NORMAL JUMP
-        is_jumping = false;
     }
 
     // FLIP
@@ -229,7 +219,6 @@ public class Controller_2D : MonoBehaviour
         }
         next_attack_time = Time.time + 0.2f; // LIMITS THE NUMBER OF ATTACKS PER SECONDS
         next_combo_time = Time.time + 0.5f;
-        is_attacking = false;
     }
 
     // DASH
