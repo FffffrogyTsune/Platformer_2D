@@ -6,6 +6,7 @@ public class Enemy : MonoBehaviour
 {
     Rigidbody2D rb;
     public Controller_2D controller_2d;
+    Animator anim_controller;
     public int health_max;
     public int health;
     public bool respawning;
@@ -22,6 +23,7 @@ public class Enemy : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        anim_controller = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
         health = health_max; // THE ENEMY STARTS WITH A FULL HEALTH
     }
@@ -39,6 +41,7 @@ public class Enemy : MonoBehaviour
             rb.constraints = RigidbodyConstraints2D.FreezeRotation;
             health = health_max;
             GetComponent<CapsuleCollider2D>().enabled = true; // REACTIVATE THE BOX COLLIDER 2D
+            anim_controller.SetBool("Dead", false);
         }
     }
 
@@ -83,7 +86,7 @@ public class Enemy : MonoBehaviour
             Rigidbody2D Coin_0 = Instantiate(coin, transform.position + new Vector3(0, 1f), transform.rotation);
             Coin_0.velocity = new Vector2(Random.Range(-4, 4), 7);
         }
-
+        anim_controller.SetBool("Dead", true);
         rb.constraints = RigidbodyConstraints2D.FreezePosition;
         GetComponent<CapsuleCollider2D>().enabled = false; // DEACTIVATE THE BOX COLLIDER 2D
     }

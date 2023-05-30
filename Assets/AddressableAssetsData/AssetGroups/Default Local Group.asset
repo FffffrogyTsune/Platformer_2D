@@ -16,7 +16,11 @@ MonoBehaviour:
   m_Data:
     m_SerializedData: []
   m_GUID: 06c4127a3a98c044e9d1e76bf5079274
-  m_SerializeEntries: []
+  m_SerializeEntries:
+  - m_GUID: d04cfa9f544add34b9560d616a93915d
+    m_Address: "Assets/Musics/D\xE9mo.wav"
+    m_ReadOnly: 0
+    m_SerializedLabels: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 37706321fed553441b42848a3b844213, type: 2}
   m_SchemaSet:
