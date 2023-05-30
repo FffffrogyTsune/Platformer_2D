@@ -39,7 +39,7 @@ public class Knight : MonoBehaviour
 
         if (enemy.health > 0)
         {
-            if (Vector2.Distance(transform.position, target.position) < 7 && Vector2.Distance(transform.position, target.position) > 2.5f && !stun && !is_attacking)
+            if (Vector2.Distance(transform.position, target.position) <= 11 && Vector2.Distance(transform.position, target.position) > 2.5f && !stun && !is_attacking)
             {
                 transform.position = Vector2.MoveTowards(transform.position, new Vector2(target.position.x, height), speed * Time.deltaTime); // FOLLOWING THE PLAYER
             }
