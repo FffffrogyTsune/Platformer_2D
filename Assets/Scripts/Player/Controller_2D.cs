@@ -259,6 +259,5 @@ public class Controller_2D : MonoBehaviour
         can_ai_respawn = true;
         yield return new WaitForSeconds(0.1f);
         can_ai_respawn = false;
-        
     }
 }

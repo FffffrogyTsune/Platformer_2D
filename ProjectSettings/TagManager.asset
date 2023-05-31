@@ -10,6 +10,7 @@ TagManager:
   - Checkpoint
   - Box
   - Coin
+  - Moving_Platform
   layers:
   - Default
   - TransparentFX
