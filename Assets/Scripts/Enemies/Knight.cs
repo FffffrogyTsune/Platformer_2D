@@ -5,18 +5,19 @@ using UnityEngine;
 public class Knight : MonoBehaviour
 {
     Rigidbody2D rb;
+    Animator anim_controller;
     Enemy enemy;
 
     [SerializeField] float speed;
     public Transform target;
     public float height;
-    [SerializeField] bool is_attacking;
+    public bool is_attacking;
     [SerializeField] bool stun = false;
 
     [Header("Attack Settings")]
     [SerializeField] int damage_point;
-    [SerializeField] Transform attack_point;
-    [SerializeField] LayerMask player_layers;
+    public Transform attack_point;
+    public LayerMask player_layers;
     public float attack_range;
     public float cooldown_time;
     float next_attack_time = 0f;
@@ -26,6 +27,7 @@ public class Knight : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        anim_controller = GetComponent<Animator>();
         enemy = GetComponent<Enemy>();
     }
 
@@ -35,6 +37,7 @@ public class Knight : MonoBehaviour
         if (Time.time >= cooldown)
         {
             stun = false;
+            anim_controller.SetBool("Stun", false);
         }
 
         if (enemy.health > 0)
@@ -47,6 +50,7 @@ public class Knight : MonoBehaviour
             if (Vector2.Distance(transform.position, target.position) <= 1.7f && Time.time >= next_attack_time && !is_attacking && !stun)
             {
                 is_attacking = true;
+                anim_controller.SetTrigger("Prepare");
                 StartCoroutine(Attack());
             }
         }
@@ -54,14 +58,17 @@ public class Knight : MonoBehaviour
 
     IEnumerator Attack()
     {
-        yield return new WaitForSeconds(0.7f);
+        yield return new WaitForSeconds(0.3f);
+        anim_controller.SetTrigger("Attack");
+        yield return new WaitForSeconds(0.3f);
         Collider2D[] hit_player = Physics2D.OverlapCircleAll(attack_point.position, attack_range, player_layers); // DETECTION OF THE PLAYER
         foreach (Collider2D player in hit_player) // IF PLAYER TOUCHED
         {
             player.GetComponent<Player_Health>().TakeDamage(damage_point); // TAKES THE TakeDamage(int damage) FUNCTION IN THE PLAYER'S SCRIPT TO GIVE DAMAGE TO THE ENEMY
         }
-        next_attack_time = Time.time + 3f;
+        next_attack_time = Time.time + Random.Range(1.75f, 2.5f);
         stun = true;
+        anim_controller.SetBool("Stun", true);
         cooldown = Time.time + cooldown_time;
         is_attacking = false;
     }

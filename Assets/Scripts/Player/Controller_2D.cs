@@ -46,7 +46,7 @@ public class Controller_2D : MonoBehaviour
 
     [Header("Attack Settings")]
     [SerializeField] int damage_point = 15;
-    [SerializeField] Transform attack_point;
+    public Transform attack_point;
     [SerializeField] Transform special_attack_point;
     [SerializeField] LayerMask enemy_layers;
     [SerializeField] LayerMask box_layers;
@@ -80,7 +80,7 @@ public class Controller_2D : MonoBehaviour
 
         if (is_dying) horizontal_value = 0;
 
-        if (next_combo_time >= Time.time) moveSpeed_horizontal = 220;
+        if (next_combo_time >= Time.time) moveSpeed_horizontal = 280;
         else moveSpeed_horizontal = 450;
 
         if (horizontal_value > 0 && !facing_right) Flip(); // PLAYER MOVING TO THE RIGHT
@@ -175,15 +175,6 @@ public class Controller_2D : MonoBehaviour
             rb.velocity = dashing_direction.normalized * dashing_velocity; // DASH
             anim_controller.SetTrigger("Dash");
             StartCoroutine(dash_ui.DashCooldown());
-        }
-    }
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.CompareTag("Enemy") && !is_dashing && player_health.current_health > 0 && !is_invincible)
-        {
-            player_health.TakeDamage(20);
-            StartCoroutine(Invincible());
         }
     }
 

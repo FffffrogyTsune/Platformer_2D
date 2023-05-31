@@ -5,7 +5,9 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     Rigidbody2D rb;
+    SpriteRenderer sr;
     public Controller_2D controller_2d;
+    Knight knight;
     Animator anim_controller;
     public int health_max;
     public int health;
@@ -18,13 +20,23 @@ public class Enemy : MonoBehaviour
     public Rigidbody2D coin;
     public int drop_coin;
 
-    [SerializeField] bool facing_right = true;
+    [SerializeField] bool facing_right = false;
+    public LayerMask player_layers;
+    [SerializeField] Transform right_detector;
+    [SerializeField] Transform left_detector;
+    public float detection_range;
+    [SerializeField] bool player_right;
+    [SerializeField] bool player_left;
+
 
     // Start is called before the first frame update
     void Start()
     {
+        respawn_point = transform.position;
+        knight = GetComponent<Knight>();
         anim_controller = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
+        sr = GetComponent<SpriteRenderer>();
         health = health_max; // THE ENEMY STARTS WITH A FULL HEALTH
     }
 
@@ -43,13 +55,17 @@ public class Enemy : MonoBehaviour
             GetComponent<CapsuleCollider2D>().enabled = true; // REACTIVATE THE BOX COLLIDER 2D
             anim_controller.SetBool("Dead", false);
         }
+
+        if (Physics2D.OverlapCircle(right_detector.position, detection_range, player_layers) && !facing_right && health > 0 && !knight.is_attacking) Flip(); // DETECTION OF THE PLAYER
+        if (Physics2D.OverlapCircle(left_detector.position, detection_range, player_layers) && facing_right && health > 0 && !knight.is_attacking) Flip(); // DETECTION OF THE PLAYER
     }
 
     // FLIP
     void Flip()
     {
         facing_right = !facing_right;
-        //sr.flipX = !sr.flipX; // SPRITE
+        knight.attack_point.localPosition = new Vector2(-knight.attack_point.localPosition.x, knight.attack_point.localPosition.y);
+        sr.flipX = !sr.flipX; // SPRITE
     }
 
     // TAKING DAMAGE
@@ -69,11 +85,9 @@ public class Enemy : MonoBehaviour
         dead = true;
         if (gauge_orb != null && health_orb != null)
         {
-            for (int i = 0; i <= Random.Range(0, 2); i++)
-            {
-                Rigidbody2D H_orb = Instantiate(health_orb, transform.position, transform.rotation);
-                H_orb.velocity = new Vector2(Random.Range(-5, 5), 12);
-            }
+            Rigidbody2D H_orb = Instantiate(health_orb, transform.position, transform.rotation);
+            H_orb.velocity = new Vector2(Random.Range(-5, 5), 12);
+        
             for (int i = 0; i <= Random.Range(0, 2); i++)
             {
                 Rigidbody2D G_orb = Instantiate(gauge_orb, transform.position, transform.rotation);
