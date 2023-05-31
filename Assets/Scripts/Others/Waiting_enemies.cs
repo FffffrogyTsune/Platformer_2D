@@ -13,6 +13,7 @@ public class Waiting_enemies : MonoBehaviour
     void Start()
     {
         moving_platform.enabled = false;
+        gameObject.GetComponent<SpriteRenderer>().enabled = false;
         col.enabled = false;
     }
 
@@ -29,6 +30,7 @@ public class Waiting_enemies : MonoBehaviour
         if (length <= 0)
         {
             ready = true;
+            gameObject.GetComponent<SpriteRenderer>().enabled = true;
             col.gameObject.GetComponent<SpriteRenderer>().enabled = true;
             col.enabled = true;
         }
