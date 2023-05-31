@@ -26,9 +26,10 @@ public class Waiting_enemies : MonoBehaviour
             if (enemy.GetComponent<CapsuleCollider2D>().enabled == false) length--;
         }
 
-        if (length == 0)
+        if (length <= 0)
         {
             ready = true;
+            col.gameObject.GetComponent<SpriteRenderer>().enabled = true;
             col.enabled = true;
         }
     }
