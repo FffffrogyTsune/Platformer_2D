@@ -131,6 +131,9 @@ public class Controller_2D : MonoBehaviour
             combo = 0;
         }
 
+        if (combo == 1) damage_point = 20;
+        else damage_point = 15;
+
         if (Input.GetButtonDown("Attack") && Time.time >= next_attack_time && !wall_sliding && !is_dashing)
         {
             combo += 1;
@@ -180,6 +183,11 @@ public class Controller_2D : MonoBehaviour
             anim_controller.SetTrigger("Dash");
             StartCoroutine(dash_ui.DashCooldown());
         }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Deadzone")) player_health.current_health = 0;
     }
 
     // JUMP
@@ -232,12 +240,17 @@ public class Controller_2D : MonoBehaviour
         Collider2D[] hit_enemies = Physics2D.OverlapCircleAll(attack_point.position, attack_range, enemy_layers); // LIST OF ALL ENEMIES HIT
         foreach (Collider2D enemy in hit_enemies) // FOR EACH ENEMIES HIT
         {
-            enemy.GetComponent<Enemy>().TakeDamage(50); // TAKES THE TakeDamage(int damage) FUNCTION IN THE ENEMY'S SCRIPT TO GIVE DAMAGE TO THE ENEMY
+            enemy.GetComponent<Enemy>().TakeDamage(75); // TAKES THE TakeDamage(int damage) FUNCTION IN THE ENEMY'S SCRIPT TO GIVE DAMAGE TO THE ENEMY
         }
         Collider2D[] hit_box = Physics2D.OverlapCircleAll(attack_point.position, attack_range, box_layers); // LIST OF ALL BOX HIT
         foreach (Collider2D box in hit_box) // FOR EACH BOX HIT
         {
             box.GetComponent<Box>().Break(); // TAKES THE Break() FUNCTION IN THE BOX'S SCRIPT TO BREAK THE BOX
+        }
+        Collider2D[] hit_dragon = Physics2D.OverlapCircleAll(attack_point.position, attack_range, dragon_layers);
+        foreach (Collider2D dragon in hit_dragon)
+        {
+            dragon.GetComponent<Enemy_02>().TakeDamage(75);
         }
         is_dashing = false;
         is_waiting = true; // COOLDOWN

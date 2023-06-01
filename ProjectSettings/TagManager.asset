@@ -12,6 +12,7 @@ TagManager:
   - Coin
   - Moving_Platform
   - Dragon
+  - Deadzone
   layers:
   - Default
   - TransparentFX

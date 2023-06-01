@@ -5,19 +5,8 @@ using UnityEngine;
 public class Box : MonoBehaviour
 {
     public Rigidbody2D coin;
+    public GameObject particle;
     public int drop_coin;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     public void Break()
     {

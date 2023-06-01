@@ -33,7 +33,7 @@ public class Player_Health : MonoBehaviour
         {
             current_health = max_health;
         }
-        if (current_health < max_health && next_add_time >= 3)
+        if (current_health < max_health && next_add_time >= 4)
         {
             GetHealth(1);
             next_add_time = 0;

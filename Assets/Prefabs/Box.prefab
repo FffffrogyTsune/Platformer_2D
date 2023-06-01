@@ -147,4 +147,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   coin: {fileID: 2486162608836841395, guid: 5e9ed83de52aff548a8576079235937d, type: 3}
+  particle: {fileID: 0}
   drop_coin: 2
