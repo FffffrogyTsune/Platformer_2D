@@ -11,6 +11,7 @@ TagManager:
   - Box
   - Coin
   - Moving_Platform
+  - Dragon
   layers:
   - Default
   - TransparentFX
@@ -23,7 +24,7 @@ TagManager:
   - Enemy
   - Box
   - Player
-  - 
+  - Dragon
   - 
   - 
   - 

@@ -50,6 +50,7 @@ public class Controller_2D : MonoBehaviour
     [SerializeField] Transform special_attack_point;
     [SerializeField] LayerMask enemy_layers;
     [SerializeField] LayerMask box_layers;
+    [SerializeField] LayerMask dragon_layers;
     float attack_range = 0.7f;
     float next_attack_time = 0f;
     float next_combo_time = 0f;
@@ -207,6 +208,11 @@ public class Controller_2D : MonoBehaviour
         foreach (Collider2D box in hit_box) // FOR EACH BOX HIT
         {
             box.GetComponent<Box>().Break(); // TAKES THE Break() FUNCTION IN THE BOX'S SCRIPT TO BREAK THE BOX
+        }
+        Collider2D[] hit_dragon = Physics2D.OverlapCircleAll(attack_point.position, attack_range, dragon_layers);
+        foreach(Collider2D dragon in hit_dragon)
+        {
+            dragon.GetComponent<Enemy_02>().TakeDamage(damage_point);
         }
         next_attack_time = Time.time + 0.2f; // LIMITS THE NUMBER OF ATTACKS PER SECONDS
         next_combo_time = Time.time + 0.5f;
