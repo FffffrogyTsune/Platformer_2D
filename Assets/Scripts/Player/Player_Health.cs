@@ -7,6 +7,7 @@ public class Player_Health : MonoBehaviour
     SpriteRenderer sr;
     public int max_health = 100;
     public int current_health;
+    float next_add_time = 0f;
     public Health_Bar health_bar;
     public Controller_2D controller_2d;
 
@@ -32,6 +33,12 @@ public class Player_Health : MonoBehaviour
         {
             current_health = max_health;
         }
+        if (current_health < max_health && next_add_time >= 3)
+        {
+            GetHealth(1);
+            next_add_time = 0;
+        }
+        else next_add_time += Time.deltaTime;
     }
 
     private void OnTriggerStay2D(Collider2D collision)

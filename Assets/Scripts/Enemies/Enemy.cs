@@ -24,6 +24,8 @@ public class Enemy : MonoBehaviour
     public LayerMask player_layers;
     [SerializeField] Transform right_detector;
     [SerializeField] Transform left_detector;
+    public Transform detector;
+    public LayerMask wall_layer;
     public float detection_range;
     [SerializeField] bool player_right;
     [SerializeField] bool player_left;
@@ -65,6 +67,7 @@ public class Enemy : MonoBehaviour
     {
         facing_right = !facing_right;
         knight.attack_point.localPosition = new Vector2(-knight.attack_point.localPosition.x, knight.attack_point.localPosition.y);
+        detector.localPosition = new Vector2(-detector.localPosition.x, detector.localPosition.y);
         sr.flipX = !sr.flipX; // SPRITE
     }
 
@@ -103,5 +106,9 @@ public class Enemy : MonoBehaviour
         anim_controller.SetBool("Dead", true);
         rb.constraints = RigidbodyConstraints2D.FreezePosition;
         GetComponent<CapsuleCollider2D>().enabled = false; // DEACTIVATE THE BOX COLLIDER 2D
+    }
+    public bool Ballz()
+    {
+        return Physics2D.OverlapCircle(detector.position, 0.3f, wall_layer);
     }
 }

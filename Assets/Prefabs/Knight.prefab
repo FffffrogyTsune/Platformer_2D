@@ -37,6 +37,7 @@ Transform:
   - {fileID: 1919741900290675377}
   - {fileID: 757286942338414657}
   - {fileID: 3685161376446575070}
+  - {fileID: 1205956479930775033}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -112,7 +113,7 @@ Rigidbody2D:
   m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 1
-  m_Constraints: 4
+  m_Constraints: 6
 --- !u!70 &1919741900089851095
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -157,6 +158,10 @@ MonoBehaviour:
     m_Bits: 1024
   right_detector: {fileID: 757286942338414657}
   left_detector: {fileID: 3685161376446575070}
+  detector: {fileID: 1205956479930775033}
+  wall_layer:
+    serializedVersion: 2
+    m_Bits: 128
   detection_range: 5.5
   player_right: 0
   player_left: 0
@@ -296,4 +301,35 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1919741900089851092}
   m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &8440696606695916652
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1205956479930775033}
+  m_Layer: 8
+  m_Name: Detector
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1205956479930775033
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8440696606695916652}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.9, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1919741900089851092}
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

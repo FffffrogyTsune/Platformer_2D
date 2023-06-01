@@ -26,7 +26,7 @@ public class Player_Gauge : MonoBehaviour
 
         if (current_gauge < max_gauge && next_add_time >= 2)
         {
-            AddGauge(10);
+            AddGauge(15);
             next_add_time = 0;
         }
         else next_add_time += Time.deltaTime;

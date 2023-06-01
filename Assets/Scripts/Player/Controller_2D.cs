@@ -81,7 +81,7 @@ public class Controller_2D : MonoBehaviour
 
         if (is_dying) horizontal_value = 0;
 
-        if (next_combo_time >= Time.time) moveSpeed_horizontal = 280;
+        if (next_combo_time >= Time.time) moveSpeed_horizontal = 310;
         else moveSpeed_horizontal = 450;
 
         if (horizontal_value > 0 && !facing_right) Flip(); // PLAYER MOVING TO THE RIGHT
