@@ -131,8 +131,8 @@ public class Controller_2D : MonoBehaviour
             combo = 0;
         }
 
-        if (combo == 1) damage_point = 20;
-        else damage_point = 15;
+        if (combo == 1) damage_point = 15;
+        else damage_point = 10;
 
         if (Input.GetButtonDown("Attack") && Time.time >= next_attack_time && !wall_sliding && !is_dashing)
         {

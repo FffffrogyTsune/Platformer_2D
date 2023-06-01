@@ -22,12 +22,8 @@ public class Enemy_02 : MonoBehaviour
 
     [SerializeField] bool facing_right = false;
     public LayerMask player_layers;
-    [SerializeField] Transform right_detector;
-    [SerializeField] Transform left_detector;
+    [SerializeField] Transform behind_detector;
     public float detection_range;
-    [SerializeField] bool player_right;
-    [SerializeField] bool player_left;
-
 
     // Start is called before the first frame update
     void Start()
@@ -52,20 +48,18 @@ public class Enemy_02 : MonoBehaviour
             transform.localPosition = respawn_point;
             rb.constraints = RigidbodyConstraints2D.FreezeRotation;
             health = health_max;
-            GetComponent<CapsuleCollider2D>().enabled = true; // REACTIVATE THE BOX COLLIDER 2D
+            GetComponent<EdgeCollider2D>().enabled = true; // REACTIVATE THE BOX COLLIDER 2D
             anim_controller.SetBool("Dead", false);
         }
 
-        if (Physics2D.OverlapCircle(right_detector.position, detection_range, player_layers) && !facing_right && health > 0 && !dragon.is_attacking) Flip(); // DETECTION OF THE PLAYER
-        if (Physics2D.OverlapCircle(left_detector.position, detection_range, player_layers) && facing_right && health > 0 && !dragon.is_attacking) Flip(); // DETECTION OF THE PLAYER
+        if (Physics2D.OverlapCircle(behind_detector.position, detection_range, player_layers) && health > 0 && !dragon.is_attacking) Flip(); // DETECTION OF THE PLAYER
     }
 
     // FLIP
     void Flip()
     {
         facing_right = !facing_right;
-        dragon.attack_point.localPosition = new Vector2(-dragon.attack_point.localPosition.x, dragon.attack_point.localPosition.y);
-        sr.flipX = !sr.flipX; // SPRITE
+        transform.localScale = new Vector2(-transform.localScale.x, transform.localScale.y);
     }
 
     // TAKING DAMAGE
@@ -102,6 +96,6 @@ public class Enemy_02 : MonoBehaviour
         }
         anim_controller.SetBool("Dead", true);
         rb.constraints = RigidbodyConstraints2D.FreezePosition;
-        GetComponent<CapsuleCollider2D>().enabled = false; // DEACTIVATE THE BOX COLLIDER 2D
+        GetComponent<EdgeCollider2D>().enabled = false; // DEACTIVATE THE BOX COLLIDER 2D
     }
 }

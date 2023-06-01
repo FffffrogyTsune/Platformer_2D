@@ -7,6 +7,8 @@ public class Pause_Menu : MonoBehaviour
 {
     public static bool paused = false;
     public GameObject pause_menu_ui;
+    public Animator music;
+    public float wait_time;
 
     // Update is called once per frame
     void Update()
@@ -38,6 +40,13 @@ public class Pause_Menu : MonoBehaviour
     public void Menu()
     {
         Time.timeScale = 1f;
+        StartCoroutine(ChangeScene());
+    }
+
+    IEnumerator ChangeScene()
+    {
+        music.SetTrigger("Fade_Out");
+        yield return new WaitForSeconds(wait_time);
         SceneManager.LoadScene(0);
     }
 }

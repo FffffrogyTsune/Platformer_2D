@@ -11,6 +11,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Game.unity
     guid: 2cda990e2423bbf4892e6590ba056729
+  - enabled: 1
+    path: Assets/Scenes/BossBattle.unity
+    guid: 2ef1909c7d60f9b408ab3c03fe22036e
   m_configObjects:
     com.unity.addressableassets: {fileID: 11400000, guid: 9a128761642ddcc429d552c152be0863, type: 2}
     com.unity.input.settings: {fileID: 11400000, guid: 6b2738b8279a30a46ae41d1c99988cc2, type: 2}
