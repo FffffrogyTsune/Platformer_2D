@@ -7,6 +7,7 @@ public class Controller_2D : MonoBehaviour
     Rigidbody2D rb;
     SpriteRenderer sr;
     CapsuleCollider2D cap;
+    public GameObject particle;
     Animator anim_controller;
     public Dash_UI dash_ui;
     public Player_Health player_health;
@@ -83,6 +84,8 @@ public class Controller_2D : MonoBehaviour
 
         if (next_combo_time >= Time.time) moveSpeed_horizontal = 310;
         else moveSpeed_horizontal = 450;
+
+        if (Mathf.Abs(horizontal_value) >= 0.35f && grounded) particle.GetComponent<ParticleSystem>().Play();
 
         if (horizontal_value > 0 && !facing_right) Flip(); // PLAYER MOVING TO THE RIGHT
         else if (horizontal_value < 0 && facing_right) Flip(); // PLAYER MOVING TO THE LEFT
@@ -191,6 +194,7 @@ public class Controller_2D : MonoBehaviour
     {
         front_check.localPosition = new Vector2(-front_check.localPosition.x, front_check.localPosition.y);
         attack_point.localPosition = new Vector2(-attack_point.localPosition.x, attack_point.localPosition.y);
+        particle.transform.localPosition = new Vector2(-particle.transform.localPosition.x, particle.transform.localPosition.y); ;
         facing_right = !facing_right;
         direction = -direction;
         sr.flipX = !sr.flipX; // SPRITE

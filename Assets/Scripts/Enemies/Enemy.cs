@@ -76,6 +76,7 @@ public class Enemy : MonoBehaviour
     {
         rb.velocity = Vector2.zero;
         health -= damage;
+        StartCoroutine(Hurt());
         if (health <= 0) // WHEN THE ENEMY HAS NO HEALTH, HE DIES
         {
             Die();
@@ -110,5 +111,12 @@ public class Enemy : MonoBehaviour
     public bool Ballz()
     {
         return Physics2D.OverlapCircle(detector.position, 0.3f, wall_layer);
+    }
+
+    IEnumerator Hurt()
+    {
+        sr.color = Color.red;
+        yield return new WaitForSeconds(0.05f);
+        sr.color = Color.white;
     }
 }
