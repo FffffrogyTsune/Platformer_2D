@@ -58,8 +58,8 @@ public class Enemy : MonoBehaviour
             anim_controller.SetBool("Dead", false);
         }
 
-        if (Physics2D.OverlapCircle(right_detector.position, detection_range, player_layers) && !facing_right && health > 0 && !knight.is_attacking) Flip(); // DETECTION OF THE PLAYER
-        if (Physics2D.OverlapCircle(left_detector.position, detection_range, player_layers) && facing_right && health > 0 && !knight.is_attacking) Flip(); // DETECTION OF THE PLAYER
+        if (Physics2D.OverlapCircle(right_detector.position, detection_range, player_layers) && !facing_right && health > 0 && !knight.is_attacking && !knight.stun) Flip(); // DETECTION OF THE PLAYER
+        if (Physics2D.OverlapCircle(left_detector.position, detection_range, player_layers) && facing_right && health > 0 && !knight.is_attacking && !knight.stun) Flip(); // DETECTION OF THE PLAYER
     }
 
     // FLIP

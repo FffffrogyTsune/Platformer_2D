@@ -41,7 +41,6 @@ public class Enemy_02 : MonoBehaviour
     {
         rb.velocity = Vector2.zero;
         respawning = false;
-        dead = false;
 
         if (counter >= 20)
         {
@@ -61,15 +60,18 @@ public class Enemy_02 : MonoBehaviour
 
         if (controller_2d.can_ai_respawn)
         {
+            dead = false;
+            dragon.stun = false;
             respawning = true;
+            counter = 0;
             transform.localPosition = respawn_point;
-            rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+            rb.constraints = RigidbodyConstraints2D.FreezeAll;
             health = health_max;
             GetComponent<EdgeCollider2D>().enabled = true; // REACTIVATE THE BOX COLLIDER 2D
             anim_controller.SetBool("Dead", false);
         }
 
-        if (Physics2D.OverlapCircle(behind_detector.position, detection_range, player_layers) && health > 0 && !dragon.is_attacking) Flip(); // DETECTION OF THE PLAYER
+        if (Physics2D.OverlapCircle(behind_detector.position, detection_range, player_layers) && health > 0 && !dragon.is_attacking && !dragon.stun) Flip(); // DETECTION OF THE PLAYER
     }
 
     // FLIP
@@ -96,17 +98,7 @@ public class Enemy_02 : MonoBehaviour
     void Die()
     {
         dead = true;
-        if (gauge_orb != null && health_orb != null)
-        {
-            Rigidbody2D H_orb = Instantiate(health_orb, transform.position, transform.rotation);
-            H_orb.velocity = new Vector2(Random.Range(-5, 5), 12);
-
-            for (int i = 0; i <= Random.Range(0, 2); i++)
-            {
-                Rigidbody2D G_orb = Instantiate(gauge_orb, transform.position, transform.rotation);
-                G_orb.velocity = new Vector2(Random.Range(-5, 5), 12);
-            }
-        }
+        dragon.stun = true;
 
         for (int i = 0; i < drop_coin; i++)
         {

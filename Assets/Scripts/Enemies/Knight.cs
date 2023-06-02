@@ -12,7 +12,7 @@ public class Knight : MonoBehaviour
     public Transform target;
     public float height;
     public bool is_attacking;
-    [SerializeField] bool stun = false;
+    public bool stun = false;
 
     [Header("Attack Settings")]
     [SerializeField] int damage_point;
@@ -42,7 +42,7 @@ public class Knight : MonoBehaviour
 
         if (enemy.health > 0)
         {
-            if (Vector2.Distance(transform.position, target.position) <= 9.5f && Vector2.Distance(transform.position, target.position) > 1.5f && !stun && !is_attacking)
+            if (Vector2.Distance(transform.position, target.position) <= 9.5f && Vector2.Distance(transform.position, target.position) > 1.5f && !stun && !is_attacking && !enemy.dead)
             {
                 transform.position = Vector2.MoveTowards(transform.position, new Vector2(target.position.x, height), speed * Time.deltaTime); // FOLLOWING THE PLAYER
             }

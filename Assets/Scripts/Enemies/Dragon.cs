@@ -8,10 +8,11 @@ public class Dragon : MonoBehaviour
     Animator anim_controller;
     Enemy_02 enemy_02;
 
+    public Rigidbody2D knight;
     public Transform target;
     public float height;
     public bool is_attacking;
-    [SerializeField] bool stun = false;
+    public bool stun = false;
 
     [Header("Attack Settings")]
     [SerializeField] int damage_point;
@@ -39,8 +40,9 @@ public class Dragon : MonoBehaviour
             anim_controller.SetBool("Stun", false);
         }
 
-        if (Vector2.Distance(transform.position, target.position) <= 4f && Time.time >= next_attack_time && !is_attacking && !stun)
+        if (Vector2.Distance(transform.position, target.position) <= 10f && Time.time >= next_attack_time && !is_attacking && !stun && !enemy_02.dead)
         {
+            print("attack");
             is_attacking = true;
             anim_controller.SetTrigger("Prepare");
             StartCoroutine(Attack());
@@ -49,7 +51,7 @@ public class Dragon : MonoBehaviour
 
     IEnumerator Attack()
     {
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(1f);
         anim_controller.SetTrigger("Attack_01");
         yield return new WaitForSeconds(0.3f);
         Collider2D[] hit_player = Physics2D.OverlapCircleAll(attack_point.position, attack_range, player_layers); // DETECTION OF THE PLAYER
@@ -57,10 +59,15 @@ public class Dragon : MonoBehaviour
         {
             player.GetComponent<Player_Health>().TakeDamage(damage_point); // TAKES THE TakeDamage(int damage) FUNCTION IN THE PLAYER'S SCRIPT TO GIVE DAMAGE TO THE ENEMY
         }
-        next_attack_time = Time.time + Random.Range(1.75f, 2.5f);
+        next_attack_time = Time.time + Random.Range(3f, 4.5f);
         stun = true;
         anim_controller.SetBool("Stun", true);
         cooldown = Time.time + cooldown_time;
         is_attacking = false;
     }
+
+    /*IEnumerator Invokate()
+    {
+
+    }*/
 }
