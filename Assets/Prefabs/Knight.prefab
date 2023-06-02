@@ -142,7 +142,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe6febf63b4cae84d9a13c50c9464e49, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  controller_2d: {fileID: 0}
+  controller_2d: {fileID: 3819230958070238857, guid: c962ab285a14fa647ae054cc0534474c, type: 3}
   health_max: 75
   health: 0
   respawning: 0
@@ -152,7 +152,7 @@ MonoBehaviour:
   gauge_orb: {fileID: 5408948881979503726, guid: 39a331813f5717244b1a47abdb80177a, type: 3}
   coin: {fileID: 2486162608836841395, guid: 5e9ed83de52aff548a8576079235937d, type: 3}
   drop_coin: 2
-  facing_right: 1
+  facing_right: 0
   player_layers:
     serializedVersion: 2
     m_Bits: 1024
@@ -178,7 +178,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 6
-  target: {fileID: 0}
+  target: {fileID: 3819230958070238860, guid: c962ab285a14fa647ae054cc0534474c, type: 3}
   height: -4.25
   is_attacking: 0
   stun: 0

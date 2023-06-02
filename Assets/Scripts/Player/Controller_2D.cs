@@ -73,6 +73,8 @@ public class Controller_2D : MonoBehaviour
 
         direction = 1;
         sr.flipX = false;
+
+        StartCoroutine(Invincible());
     }
 
     // Update is called once per frame

@@ -8,7 +8,6 @@ public class Dragon : MonoBehaviour
     Animator anim_controller;
     Enemy_02 enemy_02;
 
-    public Rigidbody2D knight;
     public Transform target;
     public float height;
     public bool is_attacking;
@@ -65,9 +64,4 @@ public class Dragon : MonoBehaviour
         cooldown = Time.time + cooldown_time;
         is_attacking = false;
     }
-
-    /*IEnumerator Invokate()
-    {
-
-    }*/
 }
