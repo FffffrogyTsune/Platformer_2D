@@ -7,6 +7,7 @@ public class Pause_Menu : MonoBehaviour
 {
     public static bool paused = false;
     public GameObject pause_menu_ui;
+    public GameObject pause;
     public Animator music;
     public float wait_time;
 
@@ -25,14 +26,14 @@ public class Pause_Menu : MonoBehaviour
 
     public void Resume()
     {
-        pause_menu_ui.SetActive(false);
+        pause.SetActive(false);
         Time.timeScale = 1f;
         paused = false;
     }
 
     void Pause()
     {
-        pause_menu_ui.SetActive(true);
+        pause.SetActive(true);
         Time.timeScale = 0f;
         paused = true;
     }
