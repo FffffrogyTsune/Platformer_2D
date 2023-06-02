@@ -34,6 +34,7 @@ public class Invokator : MonoBehaviour
         {
             Rigidbody2D enemy = Instantiate(knight, transform.position, transform.rotation);
             enemy.GetComponent<Knight>().height = enemy_height;
+            enemy.GetComponent<Knight>().boss_battle = true;
             current_enemy = enemy;
             next_invoke = Time.time + 15f;
         }

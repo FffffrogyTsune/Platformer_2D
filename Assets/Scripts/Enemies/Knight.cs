@@ -13,6 +13,7 @@ public class Knight : MonoBehaviour
     public float height;
     public bool is_attacking;
     public bool stun = false;
+    public bool boss_battle;
 
     [Header("Attack Settings")]
     [SerializeField] int damage_point;
@@ -42,12 +43,12 @@ public class Knight : MonoBehaviour
 
         if (enemy.health > 0)
         {
-            if (Vector2.Distance(transform.position, target.position) <= 9.5f && Vector2.Distance(transform.position, target.position) > 1.5f && !stun && !is_attacking && !enemy.dead)
+            if (Vector2.Distance(transform.position, target.position) <= 9.5f && Vector2.Distance(transform.position, target.position) > 1.5f && !stun && !is_attacking && !enemy.dead && !boss_battle)
             {
                 transform.position = Vector2.MoveTowards(transform.position, new Vector2(target.position.x, height), speed * Time.deltaTime); // FOLLOWING THE PLAYER
             }
 
-            if (Vector2.Distance(transform.position, target.position) <= 1.7f && Time.time >= next_attack_time && !is_attacking && !stun)
+            if (Vector2.Distance(transform.position, target.position) <= 3f && Time.time >= next_attack_time && !is_attacking && !stun)
             {
                 is_attacking = true;
                 anim_controller.SetTrigger("Prepare");
