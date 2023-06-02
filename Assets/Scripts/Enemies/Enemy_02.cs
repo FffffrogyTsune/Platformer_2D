@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Enemy_02 : MonoBehaviour
 {
@@ -9,6 +10,9 @@ public class Enemy_02 : MonoBehaviour
     public Controller_2D controller_2d;
     Dragon dragon;
     Animator anim_controller;
+    public Animator music;
+    public Animator screen;
+    public int wait_time;
     public int health_max;
     public int health;
     public bool respawning;
@@ -107,6 +111,7 @@ public class Enemy_02 : MonoBehaviour
         }
         anim_controller.SetBool("Dead", true);
         rb.constraints = RigidbodyConstraints2D.FreezePosition;
+        StartCoroutine(ChangeScene());
         GetComponent<EdgeCollider2D>().enabled = false; // DEACTIVATE THE BOX COLLIDER 2D
     }
 
@@ -115,5 +120,15 @@ public class Enemy_02 : MonoBehaviour
         sr.color = Color.red;
         yield return new WaitForSeconds(0.05f);
         sr.color = Color.white;
+    }
+
+    IEnumerator ChangeScene()
+    {
+        yield return new WaitForSeconds(3);
+        controller_2d.enabled = false;
+        music.SetTrigger("Fade_Out");
+        screen.SetTrigger("End");
+        yield return new WaitForSeconds(wait_time);
+        SceneManager.LoadScene(3);
     }
 }
