@@ -39,18 +39,18 @@ public class Dragon : MonoBehaviour
             anim_controller.SetBool("Stun", false);
         }
 
-        if (Vector2.Distance(transform.position, target.position) <= 1.7f && Time.time >= next_attack_time && !is_attacking && !stun)
+        if (Vector2.Distance(transform.position, target.position) <= 4f && Time.time >= next_attack_time && !is_attacking && !stun)
         {
-                is_attacking = true;
-                anim_controller.SetTrigger("Prepare");
-                StartCoroutine(Attack());
+            is_attacking = true;
+            anim_controller.SetTrigger("Prepare");
+            StartCoroutine(Attack());
         }
     }
 
     IEnumerator Attack()
     {
         yield return new WaitForSeconds(0.3f);
-        anim_controller.SetTrigger("Attack");
+        anim_controller.SetTrigger("Attack_01");
         yield return new WaitForSeconds(0.3f);
         Collider2D[] hit_player = Physics2D.OverlapCircleAll(attack_point.position, attack_range, player_layers); // DETECTION OF THE PLAYER
         foreach (Collider2D player in hit_player) // IF PLAYER TOUCHED

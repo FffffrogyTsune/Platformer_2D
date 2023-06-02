@@ -17,6 +17,7 @@ public class Enemy_02 : MonoBehaviour
 
     public Rigidbody2D health_orb;
     public Rigidbody2D gauge_orb;
+    [SerializeField] int counter = 0;
     public Rigidbody2D coin;
     public int drop_coin;
 
@@ -41,6 +42,22 @@ public class Enemy_02 : MonoBehaviour
         rb.velocity = Vector2.zero;
         respawning = false;
         dead = false;
+
+        if (counter >= 20)
+        {
+            counter = 0;
+            if (gauge_orb != null && health_orb != null)
+            {
+                Rigidbody2D H_orb = Instantiate(health_orb, new Vector2(transform.position.x - 5, transform.position.y), transform.rotation);
+                H_orb.velocity = new Vector2(-5, 15);
+
+                for (int i = 0; i <= Random.Range(0, 2); i++)
+                {
+                    Rigidbody2D G_orb = Instantiate(gauge_orb, new Vector2(transform.position.x - 5, transform.position.y), transform.rotation);
+                    G_orb.velocity = new Vector2(-4, 13);
+                }
+            }
+        }
 
         if (controller_2d.can_ai_respawn)
         {
@@ -67,6 +84,8 @@ public class Enemy_02 : MonoBehaviour
     {
         rb.velocity = Vector2.zero;
         health -= damage;
+        StartCoroutine(Hurt());
+        counter += 1;
         if (health <= 0) // WHEN THE ENEMY HAS NO HEALTH, HE DIES
         {
             Die();
@@ -97,5 +116,12 @@ public class Enemy_02 : MonoBehaviour
         anim_controller.SetBool("Dead", true);
         rb.constraints = RigidbodyConstraints2D.FreezePosition;
         GetComponent<EdgeCollider2D>().enabled = false; // DEACTIVATE THE BOX COLLIDER 2D
+    }
+
+    IEnumerator Hurt()
+    {
+        sr.color = Color.red;
+        yield return new WaitForSeconds(0.05f);
+        sr.color = Color.white;
     }
 }
