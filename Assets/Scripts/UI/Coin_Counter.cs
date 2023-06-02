@@ -8,6 +8,7 @@ public class Coin_Counter : MonoBehaviour
 {
     public TextMeshProUGUI text_mesh_pro;
     public int coin_count = 0;
+    public static int total_coin = 0;
 
     private void Start()
     {
