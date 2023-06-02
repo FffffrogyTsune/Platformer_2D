@@ -52,7 +52,7 @@ public class Dragon : MonoBehaviour
     {
         yield return new WaitForSeconds(1f);
         anim_controller.SetTrigger("Attack_01");
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(1f);
         Collider2D[] hit_player = Physics2D.OverlapCircleAll(attack_point.position, attack_range, player_layers); // DETECTION OF THE PLAYER
         foreach (Collider2D player in hit_player) // IF PLAYER TOUCHED
         {

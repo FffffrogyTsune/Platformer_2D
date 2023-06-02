@@ -122,7 +122,7 @@ public class Controller_2D : MonoBehaviour
             coyote_time_counter -= Time.deltaTime;
         }
 
-        if (Input.GetButtonDown("Jump") && coyote_time_counter > 0f && !is_touching_up)
+        if (Input.GetButtonDown("Jump") && coyote_time_counter > 0f && !is_touching_up && player_health.current_health > 0)
         {
             anim_controller.SetTrigger("Ascent");
             Jump();
@@ -136,7 +136,7 @@ public class Controller_2D : MonoBehaviour
         if (combo == 1) damage_point = 15;
         else damage_point = 10;
 
-        if (Input.GetButtonDown("Attack") && Time.time >= next_attack_time && !wall_sliding && !is_dashing)
+        if (Input.GetButtonDown("Attack") && Time.time >= next_attack_time && !wall_sliding && !is_dashing && player_health.current_health > 0)
         {
             combo += 1;
             next_combo_time = Time.time;
@@ -145,7 +145,7 @@ public class Controller_2D : MonoBehaviour
         }
 
 
-        if (Input.GetButtonDown("Dash") && horizontal_value != 0 && player_gauge.current_gauge >= 300 && !wall_sliding && !is_dashing && !is_waiting)
+        if (Input.GetButtonDown("Dash") && horizontal_value != 0 && player_gauge.current_gauge >= 300 && !wall_sliding && !is_dashing && !is_waiting && player_health.current_health > 0)
         {
             is_dashing = true;
             player_gauge.Reduce(300);
