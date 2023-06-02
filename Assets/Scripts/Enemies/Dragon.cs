@@ -39,7 +39,7 @@ public class Dragon : MonoBehaviour
             anim_controller.SetBool("Stun", false);
         }
 
-        if (Vector2.Distance(transform.position, target.position) <= 10f && Time.time >= next_attack_time && !is_attacking && !stun && !enemy_02.dead)
+        if (Vector2.Distance(transform.position, target.position) <= 8.5f && Time.time >= next_attack_time && !is_attacking && !stun && !enemy_02.dead)
         {
             print("attack");
             is_attacking = true;
